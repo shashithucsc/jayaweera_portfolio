@@ -1,8 +1,9 @@
 'use client';
 
-import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { HiAcademicCap, HiBookOpen, HiStar } from 'react-icons/hi';
+import { HiAcademicCap, HiBookOpen, HiStar, HiCheckBadge } from 'react-icons/hi2';
+import { gsap, useGSAP } from '@/lib/gsap';
+import SectionHeading from './ui/SectionHeading';
 
 const education = [
   {
@@ -10,233 +11,216 @@ const education = [
     institution: 'Uwa Wellassa University',
     period: 'Undergraduate',
     modules: [
-      'Cyber Security', 'Digital Forensics', 'Secure Software Development', 
-      'Modern Web Technologies', 'Data Structures & Algorithms', 'Computer Networks',
-      'Database Management', 'System Analysis & Design'
+      'Software Quality Assurance',
+      'Software Testing & Verification',
+      'Software Engineering',
+      'Modern Web Technologies',
+      'Data Structures & Algorithms',
+      'Computer Networks',
+      'Database Management',
+      'System Analysis & Design',
     ],
     icon: HiAcademicCap,
-    color: 'from-indigo-500 to-purple-500',
+    bg: 'bg-petal',
   },
   {
     degree: 'G.C.E. Advanced Level',
-    institution: 'AAB',
+    institution: 'AAB — Physical Science Stream',
     period: '2020',
-    modules: ['Combined Maths', 'Physics', 'Chemistry '],
+    modules: ['Combined Mathematics', 'Physics', 'Chemistry'],
     icon: HiBookOpen,
-    color: 'from-pink-500 to-rose-500',
+    bg: 'bg-lilac',
   },
   {
     degree: 'G.C.E. Ordinary Level',
-    institution: '9 As',
+    institution: '9 A’s Distinction',
     period: '2017',
-    description: 'Achieved 9 As.',
+    description: 'Achieved 9 A’s across all core and elective subjects.',
     icon: HiStar,
-    color: 'from-teal-500 to-emerald-500',
+    bg: 'bg-peach',
   },
 ];
 
 const certifications = [
   {
     provider: 'Frontend Masters',
+    bg: 'bg-petal',
     items: [
-      { title: 'Intermediate Python', date: 'Nov 2025', desc: 'Advanced Python concepts: decorators, generators, and memory management.' },
-      { title: 'Web Security v2', date: 'Nov 2025', desc: 'Web vulnerabilities (XSS, CSRF) and security best practices.' },
-      { title: 'Angular 17 Fundamentals', date: 'Oct 2025', desc: 'Modern Angular with Signals, Standalone Components, and RxJS.' },
-      { title: 'Enterprise Java with Spring Boot', date: 'Aug 2025', desc: 'Building robust REST APIs and microservices with Spring Boot.' },
-      { title: 'Next.js Fundamentals v4', date: 'Jul 2025', desc: 'App Router, Server Components, and full-stack React patterns.' },
-    ]
+      { title: 'Web Security v2', date: 'Nov 2025' },
+      { title: 'Intermediate Python', date: 'Nov 2025' },
+      { title: 'Angular 17 Fundamentals', date: 'Oct 2025' },
+      { title: 'Enterprise Java with Spring Boot', date: 'Aug 2025' },
+      { title: 'Next.js Fundamentals v4', date: 'Jul 2025' },
+    ],
   },
   {
     provider: 'Cloud & Infrastructure',
+    bg: 'bg-lilac',
     items: [
-      { title: 'AWS Cloud Practitioner Essentials', date: 'Aug 2025', desc: 'Core AWS services, security, architecture, and cloud concepts.' },
-      { title: 'Oracle Cloud Infrastructure 2025 AI Foundations', date: 'Aug 2025', desc: 'AI/ML concepts and OCI AI services implementation.' },
-    ]
+      { title: 'AWS Cloud Practitioner Essentials', date: 'Aug 2025' },
+      { title: 'OCI 2025 AI Foundations', date: 'Aug 2025' },
+    ],
   },
   {
     provider: 'HackerRank',
+    bg: 'bg-mint',
     items: [
-      { title: 'SQL (Intermediate)', date: 'Aug 2025', desc: 'Complex queries, joins, subqueries, and database optimization.' },
-      { title: 'SQL (Basic)', date: 'Aug 2025', desc: 'Fundamental database concepts and query construction.' },
-      { title: 'Java (Basic)', date: 'Sep 2024', desc: 'Core Java syntax, OOP principles, and problem solving.' },
-    ]
+      { title: 'SQL (Intermediate)', date: 'Aug 2025' },
+      { title: 'SQL (Basic)', date: 'Aug 2025' },
+      { title: 'Java (Basic)', date: 'Sep 2024' },
+    ],
   },
   {
     provider: 'Professional Development',
+    bg: 'bg-peach',
     items: [
-      { title: 'Mastering Agentic Design Patterns', date: 'Aug 2025', desc: 'Building autonomous AI agents and complex workflows (Udemy).' },
-      { title: 'Generative AI Overview for Project Managers', date: 'Nov 2024', desc: 'Integrating GenAI into project management workflows (PMI).' },
-    ]
-  }
+      { title: 'Mastering Agentic Design Patterns', date: 'Aug 2025' },
+      { title: 'Generative AI Overview for Project Managers', date: 'Nov 2024' },
+    ],
+  },
 ];
 
 export default function EducationSection() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const root = useRef<HTMLElement>(null);
+
+  useGSAP(
+    () => {
+      gsap.fromTo(
+        '.ed-line',
+        { scaleY: 0 },
+        {
+          scaleY: 1,
+          ease: 'none',
+          scrollTrigger: { trigger: '.ed-timeline', start: 'top 70%', end: 'bottom 60%', scrub: true },
+        }
+      );
+
+      gsap.utils.toArray<HTMLElement>('.ed-item').forEach((item) => {
+        const dir = Number(item.dataset.dir);
+        gsap.from(item.querySelector('.ed-card'), {
+          x: 80 * dir,
+          opacity: 0,
+          duration: 1,
+          ease: 'power3.out',
+          scrollTrigger: { trigger: item, start: 'top 80%' },
+        });
+        gsap.from(item.querySelector('.ed-dot'), {
+          scale: 0,
+          duration: 0.6,
+          ease: 'back.out(3)',
+          scrollTrigger: { trigger: item, start: 'top 70%' },
+        });
+      });
+
+      gsap.from('.ed-cert', {
+        y: 70,
+        opacity: 0,
+        rotate: 2,
+        stagger: 0.12,
+        duration: 0.9,
+        ease: 'power3.out',
+        scrollTrigger: { trigger: '.ed-certs', start: 'top 85%' },
+      });
+    },
+    { scope: root }
+  );
 
   return (
-    <section id="education" ref={ref} className="relative py-32 overflow-hidden bg-black">
-      {/* Background */}
-      <div className="absolute inset-0 mesh-background opacity-30" />
+    <section id="education" ref={root} className="relative py-28 overflow-hidden bg-ink">
+      <div className="absolute inset-0 dot-grid opacity-40" />
+      <div className="absolute top-1/3 -left-40 w-[460px] h-[460px] rounded-full bg-lilac/10 blur-[130px]" />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-20"
-        >
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={isInView ? { scale: 1 } : {}}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="inline-block mb-4"
-          >
-            <span className="px-4 py-2 rounded-full glass text-sm font-semibold text-purple-400 border border-purple-500/30">
-              Academic Journey
-            </span>
-          </motion.div>
-          <h2 className="text-4xl md:text-6xl font-bold gradient-text mb-6">
-            Education & Certifications
-          </h2>
-          <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-            Continuous learning and professional development
-          </p>
-        </motion.div>
+      <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8">
+        <SectionHeading
+          eyebrow="Education"
+          icon={HiAcademicCap}
+          title="Always"
+          accent="learning"
+          subtitle="Strong computer science foundations, backed by continuous certifications."
+        />
 
-        {/* Education Timeline */}
-        <div className="mb-20">
-          <div className="relative">
-            {/* Timeline Line */}
-            <div className="hidden lg:block absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-gradient-to-b from-indigo-500 via-pink-500 to-purple-500 opacity-20" />
+        {/* Timeline */}
+        <div className="ed-timeline relative mb-28">
+          <div className="absolute left-5 lg:left-1/2 top-0 bottom-0 w-px bg-ink-4 lg:-translate-x-1/2" />
+          <div className="ed-line absolute left-5 lg:left-1/2 top-0 bottom-0 w-px bg-petal origin-top lg:-translate-x-1/2" />
 
-            <div className="space-y-12">
-              {education.map((edu, index) => {
-                const Icon = edu.icon;
-                return (
-                  <motion.div
-                    key={edu.degree}
-                    initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                    animate={isInView ? { opacity: 1, x: 0 } : {}}
-                    transition={{ duration: 0.6, delay: index * 0.2 }}
-                    className={`flex flex-col lg:flex-row gap-8 items-center ${
-                      index % 2 === 0 ? 'lg:flex-row-reverse' : ''
-                    }`}
-                  >
-                    {/* Content Card */}
-                    <div className="flex-1 w-full">
-                      <motion.div
-                        whileHover={{ scale: 1.02 }}
-                        className="glass-strong rounded-2xl p-8 hover:glow-primary transition-all duration-300"
-                      >
-                        {/* Header */}
-                        <div className="flex items-start justify-between mb-6">
-                          <div className="flex items-center gap-4">
-                            <div className={`p-3 rounded-xl bg-linear-${edu.color} bg-opacity-10`}>
-                              <Icon className="w-8 h-8 text-white" />
-                            </div>
-                            <div>
-                              <h3 className="text-2xl font-bold text-white mb-1">
-                                {edu.degree}
-                              </h3>
-                              <p className="text-lg text-gray-400">{edu.institution}</p>
-                            </div>
-                          </div>
-                          <span className={`hidden sm:block px-4 py-2 rounded-full glass text-sm font-semibold text-white`}>
-                            {edu.period}
+          <div className="space-y-14">
+            {education.map((edu, i) => {
+              const Icon = edu.icon;
+              const right = i % 2 === 1;
+              return (
+                <div
+                  key={edu.degree}
+                  data-dir={right ? 1 : -1}
+                  className={`ed-item relative flex flex-col lg:flex-row items-start lg:items-center ${
+                    right ? 'lg:flex-row-reverse' : ''
+                  }`}
+                >
+                  <div className="w-full lg:w-1/2 pl-14 lg:pl-0 lg:px-12">
+                    <div className="ed-card card-soft rounded-[2rem] p-7 sm:p-8 hover:border-petal/40 transition-colors">
+                      <div className="flex items-start justify-between gap-4 mb-6">
+                        <div className="flex items-center gap-4">
+                          <span className={`w-14 h-14 rounded-2xl ${edu.bg} flex items-center justify-center shrink-0`}>
+                            <Icon className="w-7 h-7 text-ink" />
                           </span>
-                        </div>
-
-                        {/* Mobile Period Display */}
-                        <div className="sm:hidden mb-6">
-                          <span className={`px-4 py-2 rounded-full glass text-sm font-semibold text-white`}>
-                            {edu.period}
-                          </span>
-                        </div>
-
-                        {/* Modules/Description */}
-                        {edu.modules ? (
-                          <div className="flex flex-wrap gap-2">
-                            {edu.modules.map((module, i) => (
-                              <span
-                                key={i}
-                                className="px-3 py-1 rounded-full text-xs font-medium bg-white/5 text-gray-300 border border-white/10 hover:bg-white/10 transition-colors"
-                              >
-                                {module}
-                              </span>
-                            ))}
+                          <div>
+                            <h3 className="font-display text-xl sm:text-2xl text-cream leading-tight">{edu.degree}</h3>
+                            <p className="text-sm text-mauve mt-1">{edu.institution}</p>
                           </div>
-                        ) : (
-                          <p className="text-gray-300">{edu.description}</p>
-                        )}
-                      </motion.div>
+                        </div>
+                        <span className="px-3 py-1 rounded-full bg-ink-4 text-xs text-blush shrink-0">
+                          {edu.period}
+                        </span>
+                      </div>
+                      {edu.modules ? (
+                        <div className="flex flex-wrap gap-2">
+                          {edu.modules.map((m) => (
+                            <span key={m} className="px-3 py-1 rounded-full bg-ink-4 text-xs text-blush">
+                              {m}
+                            </span>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="text-sm text-mauve">{edu.description}</p>
+                      )}
                     </div>
+                  </div>
 
-                    {/* Timeline Dot */}
-                    <div className="hidden lg:block relative">
-                      <motion.div
-                        initial={{ scale: 0 }}
-                        animate={isInView ? { scale: 1 } : {}}
-                        transition={{ duration: 0.5, delay: index * 0.2 + 0.3 }}
-                        className="w-6 h-6 rounded-full bg-linear-from-indigo-500 bg-linear-to-pink-500 ring-4 ring-black"
-                      />
-                    </div>
-
-                    {/* Spacer for alternating layout */}
-                    <div className="hidden lg:block flex-1" />
-                  </motion.div>
-                );
-              })}
-            </div>
+                  <span className="ed-dot absolute left-5 lg:left-1/2 top-8 lg:top-1/2 -translate-x-1/2 lg:-translate-y-1/2 w-5 h-5 rounded-full bg-petal ring-[6px] ring-ink" />
+                  <div className="hidden lg:block lg:w-1/2" />
+                </div>
+              );
+            })}
           </div>
         </div>
 
         {/* Certifications */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.6 }}
-        >
-          <h3 className="text-3xl font-bold text-white mb-12 text-center">
-            Professional Certifications
-          </h3>
-
-          <div className="grid md:grid-cols-2 gap-8">
-            {certifications.map((group, groupIndex) => (
-              <motion.div
-                key={group.provider}
-                initial={{ opacity: 0, y: 30 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.5, delay: 0.7 + groupIndex * 0.1 }}
-                className="glass-strong rounded-2xl p-8 hover:glow-secondary transition-all duration-300"
-              >
-                <h4 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-                  <HiAcademicCap className="w-6 h-6 text-purple-400" />
-                  {group.provider}
-                </h4>
-                <div className="space-y-6">
-                  {group.items.map((cert, index) => (
-                    <div key={index} className="relative pl-6 border-l border-white/10">
-                      <div className="absolute left-[-5px] top-2 w-2.5 h-2.5 rounded-full bg-purple-500" />
-                      <div className="flex justify-between items-start mb-1">
-                        <h5 className="text-lg font-semibold text-white group-hover:text-purple-300 transition-colors">
-                          {cert.title}
-                        </h5>
-                        <span className="text-xs font-mono text-gray-500 whitespace-nowrap ml-4 mt-1">
-                          {cert.date}
-                        </span>
-                      </div>
-                      <p className="text-sm text-gray-400 leading-relaxed">
-                        {cert.desc}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
+        <h3 className="font-display text-3xl sm:text-4xl text-cream text-center mb-12">
+          Professional <span className="italic text-petal">certifications</span>
+        </h3>
+        <div className="ed-certs grid md:grid-cols-2 gap-6">
+          {certifications.map((group) => (
+            <div
+              key={group.provider}
+              className="ed-cert card-soft rounded-[2rem] p-7 sm:p-8 hover:-translate-y-1 hover:border-petal/40 transition-all duration-500"
+            >
+              <h4 className="flex items-center gap-3 font-display text-2xl text-cream mb-6">
+                <span className={`w-10 h-10 rounded-xl ${group.bg} flex items-center justify-center`}>
+                  <HiCheckBadge className="w-5 h-5 text-ink" />
+                </span>
+                {group.provider}
+              </h4>
+              <ul className="divide-y divide-blush/10">
+                {group.items.map((c) => (
+                  <li key={c.title} className="flex items-center justify-between gap-4 py-3">
+                    <span className="text-sm text-cream/90">{c.title}</span>
+                    <span className="font-mono text-xs text-mauve whitespace-nowrap">{c.date}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

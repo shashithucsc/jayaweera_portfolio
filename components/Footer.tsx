@@ -1,197 +1,194 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { HiMail, HiPhone, HiLocationMarker, HiPaperAirplane } from 'react-icons/hi';
-import { FaGithub, FaLinkedin, FaTwitter, FaDribbble } from 'react-icons/fa';
+import { useRef, useState, FormEvent } from 'react';
+import {
+  HiEnvelope,
+  HiPhone,
+  HiMapPin,
+  HiPaperAirplane,
+  HiCheckCircle,
+  HiArrowUp,
+  HiChatBubbleLeftRight,
+} from 'react-icons/hi2';
+import { FaGithub, FaLinkedin } from 'react-icons/fa';
+import { gsap, useGSAP } from '@/lib/gsap';
+import SectionHeading from './ui/SectionHeading';
+import Magnetic from './ui/Magnetic';
+import Sparkle from './ui/Sparkle';
+
+const contacts = [
+  { icon: HiEnvelope, label: 'Email', text: 'devindiuthpala@gmail.com', href: 'mailto:devindiuthpala@gmail.com', bg: 'bg-petal' },
+  { icon: HiPhone, label: 'Phone', text: '+94 76 068 8588', href: 'tel:+94760688588', bg: 'bg-lilac' },
+  { icon: HiMapPin, label: 'Location', text: 'Sri Lanka', href: '#contact', bg: 'bg-peach' },
+];
+
+const socials = [
+  { icon: FaGithub, href: 'https://github.com/shashithucsc', label: 'GitHub' },
+  { icon: FaLinkedin, href: 'https://www.linkedin.com/in/shashith-rashmika-piyathilaka-ucsc/', label: 'LinkedIn' },
+];
+
+const inputCls =
+  'w-full px-5 py-4 rounded-2xl bg-ink-3 border border-blush/10 focus:border-petal focus:ring-4 focus:ring-petal/15 outline-none transition-all text-cream placeholder-mauve/60';
 
 export default function Footer() {
+  const root = useRef<HTMLElement>(null);
+  const [sent, setSent] = useState(false);
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSent(true);
+    e.currentTarget.reset();
+    setTimeout(() => setSent(false), 4000);
+  };
+
+  useGSAP(
+    () => {
+      gsap.from('.ft-contact', {
+        x: -50,
+        opacity: 0,
+        stagger: 0.12,
+        duration: 0.9,
+        ease: 'power3.out',
+        scrollTrigger: { trigger: '.ft-grid', start: 'top 80%' },
+      });
+      gsap.from('.ft-form', {
+        y: 70,
+        opacity: 0,
+        duration: 1,
+        ease: 'power3.out',
+        scrollTrigger: { trigger: '.ft-grid', start: 'top 80%' },
+      });
+      gsap.fromTo(
+        '.ft-giant',
+        { xPercent: 12 },
+        {
+          xPercent: -12,
+          ease: 'none',
+          scrollTrigger: { trigger: '.ft-giant-wrap', start: 'top bottom', end: 'bottom top', scrub: true },
+        }
+      );
+      gsap.to('.ft-sparkle', { rotation: 360, duration: 10, repeat: -1, ease: 'none' });
+    },
+    { scope: root }
+  );
+
   return (
-    <footer id="contact" className="relative py-20 overflow-hidden bg-black border-t border-white/10">
-      {/* Background */}
-      <div className="absolute inset-0 mesh-background opacity-20" />
+    <footer id="contact" ref={root} className="relative pt-28 pb-10 overflow-hidden bg-ink-2">
+      <div className="absolute inset-0 dot-grid opacity-40" />
+      <div className="absolute top-20 right-0 w-[520px] h-[520px] rounded-full bg-petal/10 blur-[140px]" />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-12 mb-16">
-          {/* Left Side - Contact Info */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="space-y-8"
-          >
-            <div>
-              <h2 className="text-4xl md:text-5xl font-bold gradient-text mb-4">
-                Let&apos;s Work Together
-              </h2>
-              <p className="text-xl text-gray-400">
-                Have a project in mind? Let&apos;s create something amazing together.
-              </p>
-            </div>
+      <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8">
+        <SectionHeading
+          eyebrow="Contact"
+          icon={HiChatBubbleLeftRight}
+          title="Let's ship something"
+          accent="flawless together"
+          subtitle="Looking for a detail-loving QA & Test Automation Engineer? My inbox is always open."
+        />
 
-            <div className="space-y-4">
-              {[
-                { icon: HiMail, text: 'devindiuthpala@gmail.com', href: 'mailto:devindiuthpala@gmail.com' },
-                { icon: HiPhone, text: '+94 76 068 8588', href: 'tel:+94760688588' },
-                { icon: HiLocationMarker, text: 'Sri Lanka', href: '#' },
-              ].map((contact) => {
-                const Icon = contact.icon;
+        <div className="ft-grid grid lg:grid-cols-5 gap-8 mb-24">
+          <div className="lg:col-span-2 space-y-4">
+            {contacts.map((c) => {
+              const Icon = c.icon;
+              return (
+                <a
+                  key={c.label}
+                  href={c.href}
+                  className="ft-contact group flex items-center gap-5 card-soft rounded-[1.75rem] p-5 hover:border-petal/40 transition-colors"
+                >
+                  <span className={`w-14 h-14 rounded-2xl ${c.bg} flex items-center justify-center shrink-0 group-hover:rotate-[-8deg] transition-transform duration-500`}>
+                    <Icon className="w-6 h-6 text-ink" />
+                  </span>
+                  <div className="min-w-0">
+                    <div className="text-xs uppercase tracking-[0.2em] text-mauve">{c.label}</div>
+                    <div className="text-cream truncate">{c.text}</div>
+                  </div>
+                </a>
+              );
+            })}
+
+            <div className="ft-contact flex gap-3 pt-2">
+              {socials.map((s) => {
+                const Icon = s.icon;
                 return (
-                  <motion.a
-                    key={contact.text}
-                    href={contact.href}
-                    whileHover={{ x: 10 }}
-                    className="flex items-center gap-4 text-gray-300 hover:text-white transition-colors"
-                  >
-                    <div className="w-12 h-12 rounded-lg glass flex items-center justify-center">
-                      <Icon className="w-6 h-6 text-indigo-400" />
-                    </div>
-                    <span className="text-lg">{contact.text}</span>
-                  </motion.a>
+                  <Magnetic key={s.label} strength={0.4}>
+                    <a
+                      href={s.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={s.label}
+                      className="w-14 h-14 rounded-full bg-ink-3 border border-blush/10 flex items-center justify-center text-blush hover:bg-petal hover:text-ink transition-colors"
+                    >
+                      <Icon className="w-5 h-5" />
+                    </a>
+                  </Magnetic>
                 );
               })}
             </div>
-
-            {/* Social Links */}
-            <div className="flex gap-4 pt-4">
-              {[
-                { icon: FaGithub, href: 'https://github.com/shashithucsc', label: 'GitHub' },
-                { icon: FaLinkedin, href: 'https://www.linkedin.com/in/shashith-rashmika-piyathilaka-ucsc/', label: 'LinkedIn' },
-                { icon: FaTwitter, href: 'https://twitter.com', label: 'Twitter' },
-                { icon: FaDribbble, href: 'https://dribbble.com', label: 'Dribbble' },
-              ].map((social) => {
-                const Icon = social.icon;
-                return (
-                  <motion.a
-                    key={social.label}
-                    href={social.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ scale: 1.1, y: -5 }}
-                    whileTap={{ scale: 0.9 }}
-                    className="w-12 h-12 rounded-lg glass flex items-center justify-center hover:glow-primary transition-all"
-                    aria-label={social.label}
-                  >
-                    <Icon className="w-6 h-6" />
-                  </motion.a>
-                );
-              })}
-            </div>
-          </motion.div>
-
-          {/* Right Side - Contact Form */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <form className="glass-strong rounded-2xl p-8 space-y-6">
-              <div className="grid sm:grid-cols-2 gap-4">
-                <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2">
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    className="w-full px-4 py-3 rounded-lg glass border border-white/10 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all text-white placeholder-gray-500"
-                    placeholder="Devindi Uthpala"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    className="w-full px-4 py-3 rounded-lg glass border border-white/10 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all text-white placeholder-gray-500"
-                    placeholder="devindiuthpala@gmail.com"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label htmlFor="subject" className="block text-sm font-medium text-gray-300 mb-2">
-                  Subject
-                </label>
-                <input
-                  type="text"
-                  id="subject"
-                  className="w-full px-4 py-3 rounded-lg glass border border-white/10 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all text-white placeholder-gray-500"
-                  placeholder="Project Inquiry"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-2">
-                  Message
-                </label>
-                <textarea
-                  id="message"
-                  rows={5}
-                  className="w-full px-4 py-3 rounded-lg glass border border-white/10 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all text-white placeholder-gray-500 resize-none"
-                  placeholder="Tell me about your project..."
-                />
-              </div>
-
-              <motion.button
-                type="submit"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="w-full px-6 py-4 bg-linear-from-indigo-500 bg-linear-to-pink-500 rounded-lg text-white font-semibold text-lg flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
-              >
-                Send Message
-                <HiPaperAirplane className="w-5 h-5" />
-              </motion.button>
-            </form>
-          </motion.div>
-        </div>
-
-        {/* Bottom Footer */}
-        <div className="pt-8 border-t border-white/10">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <motion.p
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              className="text-gray-400"
-            >
-              © 2025 Devindi Uthapala.
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              className="flex gap-6"
-            >
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                Privacy
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                Terms
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                Sitemap
-              </a>
-            </motion.div>
           </div>
+
+          <form onSubmit={handleSubmit} className="ft-form lg:col-span-3 card-soft rounded-[2rem] p-7 sm:p-10 space-y-5">
+            <div className="grid sm:grid-cols-2 gap-5">
+              <div>
+                <label htmlFor="name" className="block text-sm text-blush mb-2">Your name</label>
+                <input id="name" required placeholder="Jane Doe" className={inputCls} />
+              </div>
+              <div>
+                <label htmlFor="email" className="block text-sm text-blush mb-2">Email</label>
+                <input id="email" type="email" required placeholder="jane@company.com" className={inputCls} />
+              </div>
+            </div>
+            <div>
+              <label htmlFor="subject" className="block text-sm text-blush mb-2">Subject</label>
+              <input id="subject" required placeholder="QA Internship Opportunity" className={inputCls} />
+            </div>
+            <div>
+              <label htmlFor="message" className="block text-sm text-blush mb-2">Message</label>
+              <textarea id="message" rows={4} required placeholder="Tell me about your team..." className={`${inputCls} resize-none`} />
+            </div>
+            <button
+              type="submit"
+              className="w-full inline-flex items-center justify-center gap-3 py-4 rounded-full bg-petal hover:bg-blush text-ink font-semibold transition-colors"
+            >
+              {sent ? (
+                <>
+                  <HiCheckCircle className="w-5 h-5" />
+                  Message received — thank you!
+                </>
+              ) : (
+                <>
+                  Send Message
+                  <HiPaperAirplane className="w-5 h-5" />
+                </>
+              )}
+            </button>
+          </form>
         </div>
       </div>
 
-      {/* Floating Contact Widget */}
-      <motion.a
-        href="#contact"
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-        className="fixed bottom-8 right-8 w-14 h-14 bg-linear-from-indigo-500 bg-linear-to-pink-500 rounded-full flex items-center justify-center shadow-lg z-30 pulse-glow"
-      >
-        <HiMail className="w-7 h-7 text-white" />
-      </motion.a>
+      {/* Giant scrolling name */}
+      <div className="ft-giant-wrap relative overflow-hidden py-6 select-none" aria-hidden="true">
+        <div className="ft-giant flex items-center gap-10 whitespace-nowrap font-display italic text-[18vw] leading-none text-outline">
+          <span>Devindi</span>
+          <Sparkle className="ft-sparkle w-[8vw] h-[8vw] text-petal shrink-0" />
+          <span>Uthapala</span>
+        </div>
+      </div>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 mt-10 pt-8 border-t border-blush/10 flex flex-col md:flex-row items-center justify-between gap-6">
+        <p className="text-sm text-mauve">
+          © 2026 Devindi Uthapala — crafted with care &amp; tested with love.
+        </p>
+        <Magnetic strength={0.4}>
+          <a
+            href="#home"
+            aria-label="Back to top"
+            className="w-14 h-14 rounded-full bg-petal flex items-center justify-center text-ink hover:bg-blush transition-colors"
+          >
+            <HiArrowUp className="w-6 h-6" />
+          </a>
+        </Magnetic>
+      </div>
     </footer>
   );
 }

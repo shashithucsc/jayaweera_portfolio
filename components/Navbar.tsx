@@ -1,178 +1,184 @@
 'use client';
 
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { useState, useEffect } from 'react';
-import { HiMenu, HiX, HiMoon, HiSun } from 'react-icons/hi';
+import { useEffect, useRef, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { HiBars3, HiXMark, HiArrowUpRight } from 'react-icons/hi2';
+import { gsap, useGSAP, ScrollTrigger, onLoaderDone } from '@/lib/gsap';
+import Sparkle from './ui/Sparkle';
+import Magnetic from './ui/Magnetic';
 
 const navLinks = [
   { name: 'Home', href: '#home' },
   { name: 'About', href: '#about' },
+  { name: 'Process', href: '#process' },
   { name: 'Projects', href: '#projects' },
   { name: 'Skills', href: '#skills' },
   { name: 'Education', href: '#education' },
-  { name: 'Contact', href: '#contact' },
 ];
 
 export default function Navbar() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(true);
-  const [activeSection, setActiveSection] = useState('home');
-  const { scrollY } = useScroll();
-  
-  const backgroundColor = useTransform(
-    scrollY,
-    [0, 100],
-    ['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0.5)']
+  const navRef = useRef<HTMLElement>(null);
+  const [open, setOpen] = useState(false);
+  const [active, setActive] = useState('home');
+  const [scrolled, setScrolled] = useState(false);
+
+  useGSAP(
+    () => {
+      const intro = gsap.from(navRef.current, {
+        yPercent: -150,
+        opacity: 0,
+        duration: 1,
+        ease: 'power3.out',
+        paused: true,
+      });
+      const off = onLoaderDone(() => intro.play());
+
+      let hidden = false;
+      ScrollTrigger.create({
+        start: 0,
+        end: 'max',
+        onUpdate: (self) => {
+          const y = self.scroll();
+          setScrolled(y > 30);
+          const shouldHide = self.direction === 1 && y > 500;
+          if (shouldHide !== hidden) {
+            hidden = shouldHide;
+            gsap.to(navRef.current, {
+              yPercent: shouldHide ? -150 : 0,
+              duration: 0.5,
+              ease: 'power3.out',
+              overwrite: 'auto',
+            });
+          }
+        },
+      });
+
+      gsap.to('.nav-sparkle', { rotation: 360, duration: 8, repeat: -1, ease: 'none' });
+      return off;
+    },
+    { scope: navRef }
   );
 
   useEffect(() => {
-    const handleScroll = () => {
-      const sections = navLinks.map(link => link.href.substring(1));
-      const currentSection = sections.find(section => {
-        const element = document.getElementById(section);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          return rect.top <= 100 && rect.bottom >= 100;
-        }
-        return false;
+    const ids = [...navLinks.map((l) => l.href.slice(1)), 'contact'];
+    const onScroll = () => {
+      const current = ids.find((id) => {
+        const el = document.getElementById(id);
+        if (!el) return false;
+        const r = el.getBoundingClientRect();
+        return r.top <= 160 && r.bottom >= 160;
       });
-      if (currentSection) setActiveSection(currentSection);
+      if (current) setActive(current);
     };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
-
-  const toggleTheme = () => {
-    setIsDarkMode(!isDarkMode);
-    document.documentElement.classList.toggle('dark');
-  };
 
   return (
     <>
-      <motion.nav
-        style={{ backgroundColor }}
-        className="fixed top-0 left-0 right-0 z-40 backdrop-blur-xl border-b border-white/10"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 md:h-20">
-            {/* Logo */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
-              className="flex items-center"
-            >
-              <div className="relative">
-                <div className="absolute inset-0 bg-linear-to-r from-indigo-500 to-pink-500 blur-lg opacity-50" />
-                <h1 className="relative text-2xl md:text-3xl font-bold gradient-text">
-                  DU
-                </h1>
-              </div>
-            </motion.div>
+      <header ref={navRef} className="fixed top-4 inset-x-0 z-50 px-4">
+        <nav
+          className={`max-w-6xl mx-auto flex items-center justify-between rounded-full pl-5 pr-2 py-2 transition-all duration-500 ${
+            scrolled
+              ? 'bg-ink-2/80 backdrop-blur-xl border border-blush/10 shadow-xl shadow-black/40'
+              : 'bg-transparent border border-transparent'
+          }`}
+        >
+          <a href="#home" className="flex items-center gap-2 group">
+            <Sparkle className="nav-sparkle w-5 h-5 text-petal" />
+            <span className="font-display italic text-2xl font-semibold text-cream">
+              Devindi<span className="text-petal not-italic">.</span>
+            </span>
+          </a>
 
-            {/* Desktop Navigation */}
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="hidden md:flex items-center space-x-1"
-            >
-              {navLinks.map((link, index) => (
-                <motion.a
+          <div className="hidden lg:flex items-center gap-1">
+            {navLinks.map((link) => {
+              const isActive = active === link.href.slice(1);
+              return (
+                <a
                   key={link.name}
                   href={link.href}
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.1 * index }}
-                  className={`relative px-4 py-2 rounded-lg transition-all ${
-                    activeSection === link.href.substring(1)
-                      ? 'text-white'
-                      : 'text-gray-300 hover:text-white'
+                  className={`relative px-4 py-2 rounded-full text-sm transition-colors ${
+                    isActive ? 'text-ink font-semibold' : 'text-mauve hover:text-cream'
                   }`}
                 >
-                  {activeSection === link.href.substring(1) && (
-                    <motion.div
-                      layoutId="activeNav"
-                      className="absolute inset-0 glass rounded-lg"
+                  {isActive && (
+                    <motion.span
+                      layoutId="nav-pill"
+                      className="absolute inset-0 rounded-full bg-blush"
                       transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                     />
                   )}
                   <span className="relative z-10">{link.name}</span>
-                </motion.a>
-              ))}
-            </motion.div>
+                </a>
+              );
+            })}
+          </div>
 
-            {/* Theme Toggle & Mobile Menu Button */}
-            <div className="flex items-center space-x-4">
-              <motion.button
-                whileHover={{ scale: 1.1, rotate: 180 }}
-                whileTap={{ scale: 0.9 }}
-                onClick={toggleTheme}
-                className="p-2 rounded-full glass hover:glow-primary transition-all"
+          <div className="flex items-center gap-2">
+            <Magnetic strength={0.25} className="hidden sm:inline-block">
+              <a
+                href="#contact"
+                className="inline-flex items-center gap-2 pl-5 pr-2 py-2 rounded-full bg-petal text-ink text-sm font-semibold hover:bg-blush transition-colors"
               >
-                {isDarkMode ? (
-                  <HiSun className="w-6 h-6 text-yellow-400" />
-                ) : (
-                  <HiMoon className="w-6 h-6 text-indigo-400" />
-                )}
-              </motion.button>
+                Let&apos;s Talk
+                <span className="w-7 h-7 rounded-full bg-ink flex items-center justify-center">
+                  <HiArrowUpRight className="w-4 h-4 text-petal" />
+                </span>
+              </a>
+            </Magnetic>
 
+            <button
+              onClick={() => setOpen(true)}
+              aria-label="Open menu"
+              className="lg:hidden w-11 h-11 rounded-full bg-ink-3 border border-blush/10 flex items-center justify-center text-cream"
+            >
+              <HiBars3 className="w-6 h-6" />
+            </button>
+          </div>
+        </nav>
+      </header>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ clipPath: 'circle(0% at 100% 0%)' }}
+            animate={{ clipPath: 'circle(150% at 100% 0%)' }}
+            exit={{ clipPath: 'circle(0% at 100% 0%)' }}
+            transition={{ duration: 0.6, ease: [0.76, 0, 0.24, 1] }}
+            className="fixed inset-0 z-[60] bg-ink-2 flex flex-col"
+          >
+            <div className="absolute inset-0 dot-grid opacity-50" />
+            <div className="relative flex items-center justify-between p-6">
+              <span className="font-display italic text-2xl text-cream">
+                Devindi<span className="text-petal">.</span>
+              </span>
               <button
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="md:hidden p-2 rounded-full glass hover:glow-primary transition-all"
+                onClick={() => setOpen(false)}
+                aria-label="Close menu"
+                className="w-11 h-11 rounded-full bg-petal flex items-center justify-center text-ink"
               >
-                {isMenuOpen ? (
-                  <HiX className="w-6 h-6" />
-                ) : (
-                  <HiMenu className="w-6 h-6" />
-                )}
+                <HiXMark className="w-6 h-6" />
               </button>
             </div>
-          </div>
-        </div>
-      </motion.nav>
-
-      {/* Mobile Menu Drawer */}
-      <motion.div
-        initial={false}
-        animate={{
-          x: isMenuOpen ? 0 : '100%',
-        }}
-        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-        className="fixed top-0 right-0 bottom-0 w-64 glass-strong z-50 md:hidden border-l border-white/10"
-      >
-        <div className="flex flex-col h-full p-6 pt-24">
-          {navLinks.map((link, index) => (
-            <motion.a
-              key={link.name}
-              href={link.href}
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: isMenuOpen ? 1 : 0, x: isMenuOpen ? 0 : 50 }}
-              transition={{ delay: index * 0.1 }}
-              onClick={() => setIsMenuOpen(false)}
-              className={`py-4 px-4 rounded-lg mb-2 transition-all ${
-                activeSection === link.href.substring(1)
-                  ? 'glass text-white glow-primary'
-                  : 'text-gray-300 hover:glass hover:text-white'
-              }`}
-            >
-              {link.name}
-            </motion.a>
-          ))}
-        </div>
-      </motion.div>
-
-      {/* Mobile Menu Overlay */}
-      {isMenuOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          onClick={() => setIsMenuOpen(false)}
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden"
-        />
-      )}
+            <div className="relative flex-1 flex flex-col justify-center px-8 gap-2">
+              {[...navLinks, { name: 'Contact', href: '#contact' }].map((link, i) => (
+                <motion.a
+                  key={link.name}
+                  href={link.href}
+                  onClick={() => setOpen(false)}
+                  initial={{ opacity: 0, y: 40 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 + i * 0.06, duration: 0.5 }}
+                  className="font-display text-5xl text-cream hover:text-petal hover:italic transition-all"
+                >
+                  {link.name}
+                </motion.a>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }
