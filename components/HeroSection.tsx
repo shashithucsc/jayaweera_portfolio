@@ -14,8 +14,6 @@ import { gsap, useGSAP, onLoaderDone } from '@/lib/gsap';
 import Magnetic from './ui/Magnetic';
 import Sparkle from './ui/Sparkle';
 
-const roles = ['Quality', 'Reliability', 'Performance', 'Accessibility', 'Delight'];
-
 const orbit = [
   { icon: SiSelenium, label: 'Selenium', color: 'text-mint' },
   { icon: FaVial, label: 'Playwright', color: 'text-petal' },
@@ -66,10 +64,9 @@ const floatCards = [
 
 export default function HeroSection() {
   const root = useRef<HTMLElement>(null);
-  const roleRef = useRef<HTMLSpanElement>(null);
 
   useGSAP(
-    (_ctx, contextSafe) => {
+    (_ctx) => {
       const wave = root.current?.querySelector<SVGPathElement>('.hero-wave');
       const waveLen = wave ? wave.getTotalLength() : 0;
       if (wave) gsap.set(wave, { strokeDasharray: waveLen, strokeDashoffset: waveLen });
@@ -132,29 +129,6 @@ export default function HeroSection() {
           ease: 'sine.inOut',
         });
       });
-
-      /* ---------- Rotating role word ---------- */
-      let idx = 0;
-      const cycle = contextSafe!(() => {
-        const el = roleRef.current;
-        if (!el) return;
-        gsap.to(el, {
-          yPercent: -110,
-          opacity: 0,
-          duration: 0.45,
-          ease: 'power2.in',
-          onComplete: () => {
-            idx = (idx + 1) % roles.length;
-            el.textContent = roles[idx];
-            gsap.fromTo(
-              el,
-              { yPercent: 110, opacity: 0 },
-              { yPercent: 0, opacity: 1, duration: 0.6, ease: 'power3.out' }
-            );
-          },
-        });
-      });
-      gsap.timeline({ repeat: -1, delay: 3 }).call(cycle, [], 2.6);
 
       /* ---------- Scroll-away parallax ---------- */
       gsap.to('.hero-content', {
@@ -263,22 +237,17 @@ export default function HeroSection() {
               </span>
             </h1>
 
-            <div className="hero-fade mt-6 flex flex-wrap items-baseline justify-center lg:justify-start gap-x-3 text-lg sm:text-2xl text-cream/90">
-              <span>QA Engineer who tests for</span>
-              <span className="relative inline-block overflow-hidden h-[1.35em] align-bottom">
-                <span
-                  ref={roleRef}
-                  className="inline-block font-display italic font-semibold text-petal"
-                >
-                  {roles[0]}
-                </span>
+            <div className="hero-fade mt-6 text-center lg:text-left text-lg sm:text-2xl text-cream/90">
+              <span className="font-display italic font-semibold text-petal">
+                Aspiring QA Engineer | Passionate about Software Quality
               </span>
             </div>
 
             <p className="hero-fade mt-6 text-base sm:text-lg text-mauve max-w-xl mx-auto lg:mx-0 leading-relaxed">
-              A detail-obsessed Computer Science undergraduate who breaks things beautifully —
-              crafting test strategies, automation suites and bug reports so every release feels
-              effortless for real users.
+              A passionate Computer Science undergraduate with a strong interest in Software Quality
+              Assurance. Eager to explore manual testing, test automation, and bug tracking while
+              continuously improving my technical skills. Motivated to contribute to building
+              reliable, high-quality, and user-friendly software.
             </p>
 
             <div className="hero-fade mt-10 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
