@@ -22,7 +22,7 @@ const navLinks = [
 export default function Navbar() {
   const navRef = useRef<HTMLElement>(null);
   const pathname = usePathname();
-  const isTryPage = pathname === '/try';
+  const isTryPage = pathname === '/try' || pathname === '/try1';
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(isTryPage ? 'try' : 'home');
   const [scrolled, setScrolled] = useState(false);
@@ -113,7 +113,8 @@ export default function Navbar() {
 
           <div className="hidden lg:flex items-center gap-1">
             {navLinks.map((link) => {
-              const isActive = (isTryPage ? 'try' : active) === link.sectionId;
+              const currentActive = pathname === '/try' ? 'try' : pathname === '/try1' ? 'try1' : active;
+              const isActive = currentActive === link.sectionId;
               return (
                 <Link
                   key={link.name}
