@@ -8,19 +8,29 @@ import {
   HiBugAnt,
   HiSignal,
 } from 'react-icons/hi2';
-import { SiSelenium, SiCypress, SiPostman, SiJira, SiApachejmeter } from 'react-icons/si';
+import {
+  SiPostman,
+  SiReact,
+  SiDjango,
+  SiPhp,
+  SiMysql,
+  SiGithubactions,
+} from 'react-icons/si';
 import { FaVial } from 'react-icons/fa';
 import { gsap, useGSAP, onLoaderDone } from '@/lib/gsap';
 import Magnetic from './ui/Magnetic';
 import Sparkle from './ui/Sparkle';
 
+const roles = ['Quality', 'Reliability', 'Automation', 'Accuracy', 'Usability'];
+
 const orbit = [
-  { icon: SiSelenium, label: 'Selenium', color: 'text-mint' },
-  { icon: FaVial, label: 'Playwright', color: 'text-petal' },
-  { icon: SiCypress, label: 'Cypress', color: 'text-lilac' },
+  { icon: FaVial, label: 'Playwright', color: 'text-mint' },
   { icon: SiPostman, label: 'Postman', color: 'text-peach' },
-  { icon: SiJira, label: 'Jira', color: 'text-blush' },
-  { icon: SiApachejmeter, label: 'JMeter', color: 'text-mint' },
+  { icon: SiGithubactions, label: 'GitHub Actions', color: 'text-petal' },
+  { icon: SiReact, label: 'React.js', color: 'text-lilac' },
+  { icon: SiDjango, label: 'Django', color: 'text-mint' },
+  { icon: SiPhp, label: 'PHP', color: 'text-blush' },
+  { icon: SiMysql, label: 'MySQL', color: 'text-peach' },
 ];
 
 const sparkles = [
@@ -34,29 +44,29 @@ const sparkles = [
 
 const floatCards = [
   {
-    pos: 'top-[4%] -left-[6%] sm:-left-[14%]',
+    pos: 'top-[4%] -left-2 sm:-left-6',
     icon: HiCheckCircle,
     iconBg: 'bg-mint',
-    title: '142 / 142',
-    sub: 'Tests passed',
+    title: '21 CI Runs',
+    sub: 'Playwright POM',
     depth: 1.4,
     extra: '',
   },
   {
-    pos: 'bottom-[8%] -right-[4%] sm:-right-[10%]',
+    pos: 'bottom-[6%] -right-2 sm:-right-6',
     icon: HiBugAnt,
     iconBg: 'bg-petal',
-    title: 'Bug squashed',
-    sub: 'Severity: Critical',
+    title: '7 Bugs Logged',
+    sub: 'IEEE 829 & RTM',
     depth: 1.8,
     extra: '',
   },
   {
-    pos: 'top-[40%] -right-[18%]',
+    pos: 'top-[42%] -right-4 sm:-right-8',
     icon: HiSignal,
     iconBg: 'bg-lilac',
-    title: '200 OK',
-    sub: 'API contract',
+    title: '14 / 14 Pass',
+    sub: 'Postman API Suite',
     depth: 1.1,
     extra: 'hidden md:block',
   },
@@ -64,14 +74,14 @@ const floatCards = [
 
 export default function HeroSection() {
   const root = useRef<HTMLElement>(null);
+  const roleRef = useRef<HTMLSpanElement>(null);
 
   useGSAP(
-    (_ctx) => {
+    (_, contextSafe) => {
       const wave = root.current?.querySelector<SVGPathElement>('.hero-wave');
       const waveLen = wave ? wave.getTotalLength() : 0;
       if (wave) gsap.set(wave, { strokeDasharray: waveLen, strokeDashoffset: waveLen });
 
-      /* ---------- Intro timeline (plays when loader finishes) ---------- */
       const tl = gsap.timeline({ paused: true, defaults: { ease: 'power3.out' } });
       tl.from('.hero-blob', { scale: 0, opacity: 0, duration: 1.6, stagger: 0.15 }, 0)
         .from('.hero-eyebrow', { y: 24, opacity: 0, duration: 0.7 }, 0.15)
@@ -97,7 +107,6 @@ export default function HeroSection() {
 
       const off = onLoaderDone(() => tl.play());
 
-      /* ---------- Ambient loops ---------- */
       gsap.to('.hero-orbit', { rotation: 360, duration: 48, repeat: -1, ease: 'none' });
       gsap.to('.orbit-icon', { rotation: -360, duration: 48, repeat: -1, ease: 'none' });
       gsap.to('.hero-orbit-inner', { rotation: -360, duration: 70, repeat: -1, ease: 'none' });
@@ -130,7 +139,28 @@ export default function HeroSection() {
         });
       });
 
-      /* ---------- Scroll-away parallax ---------- */
+      let idx = 0;
+      const cycle = contextSafe!(() => {
+        const el = roleRef.current;
+        if (!el) return;
+        gsap.to(el, {
+          yPercent: -110,
+          opacity: 0,
+          duration: 0.45,
+          ease: 'power2.in',
+          onComplete: () => {
+            idx = (idx + 1) % roles.length;
+            el.textContent = roles[idx];
+            gsap.fromTo(
+              el,
+              { yPercent: 110, opacity: 0 },
+              { yPercent: 0, opacity: 1, duration: 0.6, ease: 'power3.out' }
+            );
+          },
+        });
+      });
+      gsap.timeline({ repeat: -1, delay: 3 }).call(cycle, [], 2.6);
+
       gsap.to('.hero-content', {
         y: -120,
         opacity: 0,
@@ -143,7 +173,6 @@ export default function HeroSection() {
         scrollTrigger: { trigger: root.current, start: 'top top', end: 'bottom top', scrub: true },
       });
 
-      /* ---------- Mouse parallax ---------- */
       const setters = gsap.utils.toArray<HTMLElement>('[data-depth]').map((el) => ({
         x: gsap.quickTo(el, 'x', { duration: 1.2, ease: 'power3' }),
         y: gsap.quickTo(el, 'y', { duration: 1.2, ease: 'power3' }),
@@ -171,9 +200,8 @@ export default function HeroSection() {
     <section
       id="home"
       ref={root}
-      className="relative min-h-screen flex items-center overflow-hidden bg-ink pt-32 pb-24"
+      className="relative min-h-screen flex items-center overflow-hidden bg-ink pt-24 pb-12"
     >
-      {/* Background motion layers */}
       <div className="absolute inset-0 dot-grid opacity-70" />
       <div className="hero-blob absolute -top-32 -left-32 w-[480px] h-[480px] rounded-full bg-petal/20 blur-[120px]" />
       <div className="hero-blob absolute top-1/3 -right-40 w-[520px] h-[520px] rounded-full bg-lilac/20 blur-[130px]" />
@@ -204,86 +232,91 @@ export default function HeroSection() {
       </svg>
 
       <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 w-full">
-        <div className="grid lg:grid-cols-2 gap-16 lg:gap-10 items-center">
+        <div className="grid lg:grid-cols-2 gap-10 lg:gap-8 items-center">
           {/* Left — copy */}
           <div className="hero-content text-center lg:text-left">
-            <div className="hero-eyebrow inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-ink-3/80 border border-mint/25 mb-8">
+            <div className="hero-eyebrow inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-ink-3/80 border border-mint/25 mb-5">
               <span className="relative flex h-2.5 w-2.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-mint opacity-75" />
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-mint" />
               </span>
               <span className="text-xs sm:text-sm text-cream/90">
-                Open to QA &amp; Test Automation roles
+                Computer Science &amp; Technology Undergraduate | QA &amp; Software Testing
               </span>
             </div>
 
-            <p className="hero-hello font-display italic text-2xl sm:text-3xl text-blush mb-2">
+            <p className="hero-hello font-display italic text-xl sm:text-2xl text-blush mb-1">
               Hello, I&apos;m
             </p>
 
-            <h1 className="font-display font-semibold text-[3.6rem] leading-[0.95] sm:text-8xl xl:text-[7.5rem] text-cream tracking-tight">
-              <span className="block overflow-hidden pb-2">
+            <h1 className="font-display font-semibold text-[2.8rem] leading-[0.95] sm:text-6xl xl:text-[5rem] text-cream tracking-tight">
+              <span className="block overflow-hidden pb-1.5">
                 {'Devindi'.split('').map((c, i) => (
                   <span key={i} className="hero-char inline-block">
                     {c}
                   </span>
                 ))}
               </span>
-              <span className="block overflow-hidden pb-3">
+              <span className="block overflow-hidden pb-2">
                 <span className="hero-line-2 inline-flex items-start gap-3 italic text-petal">
-                  Uthapala
-                  <Sparkle className="w-6 h-6 sm:w-9 sm:h-9 text-blush mt-2" />
+                  Jayaweera
+                  <Sparkle className="w-5 h-5 sm:w-8 sm:h-8 text-blush mt-2" />
                 </span>
               </span>
             </h1>
 
-            <div className="hero-fade mt-6 text-center lg:text-left text-lg sm:text-2xl text-cream/90">
-              <span className="font-display italic font-semibold text-petal">
-                Aspiring QA Engineer | Passionate about Software Quality
+            <div className="hero-fade mt-4 flex flex-wrap items-baseline justify-center lg:justify-start gap-x-3 text-base sm:text-xl text-cream/90">
+              <span>QA &amp; Test Automation focused on</span>
+              <span className="relative inline-block overflow-hidden h-[1.35em] align-bottom">
+                <span
+                  ref={roleRef}
+                  className="inline-block font-display italic font-semibold text-petal"
+                >
+                  {roles[0]}
+                </span>
               </span>
             </div>
 
-            <p className="hero-fade mt-6 text-base sm:text-lg text-mauve max-w-xl mx-auto lg:mx-0 leading-relaxed">
-              A passionate Computer Science undergraduate with a strong interest in Software Quality
-              Assurance. Eager to explore manual testing, test automation, and bug tracking while
-              continuously improving my technical skills. Motivated to contribute to building
-              reliable, high-quality, and user-friendly software.
+            <p className="hero-fade mt-4 text-sm sm:text-base text-mauve max-w-xl mx-auto lg:mx-0 leading-relaxed">
+              Final-year Computer Science and Technology undergraduate at Uva Wellassa University
+              with hands-on experience in functional, regression, and API testing using Postman and
+              Playwright, alongside full-stack web development.
             </p>
 
-            <div className="hero-fade mt-10 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+            <div className="hero-fade mt-7 flex flex-col sm:flex-row gap-3.5 justify-center lg:justify-start">
               <Magnetic>
                 <a
                   href="#contact"
-                  className="group inline-flex items-center justify-center gap-3 pl-7 pr-2 py-2 rounded-full bg-petal text-ink font-semibold text-base hover:bg-blush transition-colors"
+                  className="group inline-flex items-center justify-center gap-3 pl-6 pr-2 py-2 rounded-full bg-petal text-ink font-semibold text-sm sm:text-base hover:bg-blush transition-colors"
                 >
                   Let&apos;s Connect
-                  <span className="w-10 h-10 rounded-full bg-ink flex items-center justify-center group-hover:rotate-[-45deg] transition-transform duration-300">
-                    <HiArrowRight className="w-5 h-5 text-petal" />
+                  <span className="w-9 h-9 rounded-full bg-ink flex items-center justify-center group-hover:rotate-[-45deg] transition-transform duration-300">
+                    <HiArrowRight className="w-4 h-4 text-petal" />
                   </span>
                 </a>
               </Magnetic>
               <Magnetic>
                 <a
                   href="/CV.pdf"
-                  className="inline-flex items-center justify-center gap-3 px-7 py-4 rounded-full border border-blush/25 text-cream font-medium hover:border-petal hover:text-petal transition-colors"
+                  className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-full border border-blush/25 text-cream text-sm sm:text-base font-medium hover:border-petal hover:text-petal transition-colors"
                 >
-                  <HiArrowDownTray className="w-5 h-5" />
+                  <HiArrowDownTray className="w-4 h-4" />
                   Download CV
                 </a>
               </Magnetic>
             </div>
 
-            <div className="hero-fade mt-12 flex items-center justify-center lg:justify-start gap-8">
+            <div className="hero-fade mt-8 flex items-center justify-center lg:justify-start gap-6 sm:gap-8">
               {[
-                { n: '12+', l: 'Projects' },
-                { n: '6m+', l: 'Experience' },
-                { n: '100%', l: 'Curiosity' },
+                { n: '6', l: 'Projects' },
+                { n: '3.38', l: 'GPA' },
+                { n: '6', l: 'Certifications' },
               ].map((s, i) => (
-                <div key={s.l} className="flex items-center gap-8">
-                  {i > 0 && <span className="w-px h-10 bg-blush/15" />}
+                <div key={s.l} className="flex items-center gap-6 sm:gap-8">
+                  {i > 0 && <span className="w-px h-8 bg-blush/15" />}
                   <div>
-                    <div className="font-display text-3xl text-cream">{s.n}</div>
-                    <div className="text-xs uppercase tracking-[0.2em] text-mauve mt-1">{s.l}</div>
+                    <div className="font-display text-2xl sm:text-3xl text-cream">{s.n}</div>
+                    <div className="text-[11px] uppercase tracking-[0.2em] text-mauve mt-0.5">{s.l}</div>
                   </div>
                 </div>
               ))}
@@ -294,9 +327,8 @@ export default function HeroSection() {
           <div className="hero-visual-scroll flex justify-center">
             <div
               data-depth="0.5"
-              className="relative w-[300px] h-[300px] sm:w-[460px] sm:h-[460px]"
+              className="relative w-[270px] h-[270px] sm:w-[350px] sm:h-[350px] xl:w-[390px] xl:h-[390px]"
             >
-              {/* Orbit rings */}
               <div className="hero-orbit-wrap absolute inset-0">
                 <div className="hero-orbit-inner absolute inset-[12%] rounded-full border border-lilac/15">
                   <span className="absolute -top-1 left-1/2 w-2 h-2 rounded-full bg-lilac" />
@@ -327,7 +359,6 @@ export default function HeroSection() {
                 </div>
               </div>
 
-              {/* Arch portrait */}
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="relative w-[58%] h-[78%]">
                   <div className="hero-arch-outline absolute inset-0 translate-x-4 translate-y-4 rounded-t-full rounded-b-[2rem] border-2 border-petal/60" />
@@ -337,14 +368,13 @@ export default function HeroSection() {
                   >
                     <img
                       src="/images/profile.png"
-                      alt="Devindi Uthapala"
+                      alt="Devindi Jayaweera"
                       className="hero-arch-img w-full h-full object-cover"
                     />
                   </div>
                 </div>
               </div>
 
-              {/* Floating status cards */}
               {floatCards.map((card) => {
                 const Icon = card.icon;
                 return (
@@ -374,7 +404,6 @@ export default function HeroSection() {
         </div>
       </div>
 
-      {/* Scroll cue */}
       <a
         href="#about"
         aria-label="Scroll down"

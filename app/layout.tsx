@@ -2,27 +2,28 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Devindi Uthapala | QA & Test Automation Engineer",
+  title: "Devindi Jayaweera | QA & Software Testing Portfolio",
   description:
-    "Portfolio of Devindi Uthapala — QA & Test Automation Engineer specializing in Selenium, Playwright, Cypress, API & performance testing, with a strong full-stack foundation.",
+    "Portfolio of Devindi Jayaweera — Final-year Computer Science & Technology undergraduate at Uva Wellassa University specializing in Quality Assurance, Playwright & Postman Test Automation, and Full-Stack Web Development.",
   keywords: [
-    "Devindi Uthapala",
+    "Devindi Jayaweera",
     "QA Engineer",
     "Quality Assurance",
-    "Test Automation",
-    "Selenium",
-    "Playwright",
-    "Cypress",
-    "Postman",
-    "API Testing",
     "Software Testing",
-    "Uwa Wellassa University",
+    "Playwright",
+    "Postman",
+    "Manual Testing",
+    "Test Automation",
+    "Uva Wellassa University",
+    "React.js",
+    "Django",
+    "Node.js",
   ],
-  authors: [{ name: "Devindi Uthapala" }],
+  authors: [{ name: "Devindi Jayaweera" }],
   openGraph: {
-    title: "Devindi Uthapala | QA & Test Automation Engineer",
+    title: "Devindi Jayaweera | QA & Software Testing Portfolio",
     description:
-      "Detail-obsessed QA & Test Automation Engineer crafting flawless user experiences.",
+      "Computer Science & Technology undergraduate specializing in QA, Test Automation (Playwright, Postman), and Full-Stack Development.",
     type: "website",
   },
 };

@@ -7,35 +7,26 @@ import SectionHeading from './ui/SectionHeading';
 
 const education = [
   {
-    degree: 'BSc. Computer Science and Technology',
-    institution: 'Uwa Wellassa University',
-    period: 'Undergraduate',
-    modules: [
-      'Software Quality Assurance',
-      'Software Testing & Verification',
-      'Software Engineering',
-      'Modern Web Technologies',
-      'Data Structures & Algorithms',
-      'Computer Networks',
-      'Database Management',
-      'System Analysis & Design',
-    ],
+    degree: 'BSc (Hons) in Computer Science and Technology',
+    institution: 'Uva Wellassa University, Sri Lanka',
+    period: '2023 – 2027',
+    description: 'Current GPA: 3.38 — Focusing on Software Quality Assurance, Test Automation, and Full-Stack Web Development.',
     icon: HiAcademicCap,
     bg: 'bg-petal',
   },
   {
     degree: 'G.C.E. Advanced Level',
-    institution: 'AAB — Physical Science Stream',
-    period: '2020',
-    modules: ['Combined Mathematics', 'Physics', 'Chemistry'],
+    institution: 'Physical Science Stream',
+    period: '2021',
+    modules: ['2Cs, 1S'],
     icon: HiBookOpen,
     bg: 'bg-lilac',
   },
   {
     degree: 'G.C.E. Ordinary Level',
-    institution: '9 A’s Distinction',
+    institution: '9 A’s',
     period: '2017',
-    description: 'Achieved 9 A’s across all core and elective subjects.',
+    description: 'Achieved 9 A’s across all subjects.',
     icon: HiStar,
     bg: 'bg-peach',
   },
@@ -43,39 +34,21 @@ const education = [
 
 const certifications = [
   {
-    provider: 'Frontend Masters',
+    provider: 'QA & Test Automation',
     bg: 'bg-petal',
     items: [
-      { title: 'Web Security v2', date: 'Nov 2025' },
-      { title: 'Intermediate Python', date: 'Nov 2025' },
-      { title: 'Angular 17 Fundamentals', date: 'Oct 2025' },
-      { title: 'Enterprise Java with Spring Boot', date: 'Aug 2025' },
-      { title: 'Next.js Fundamentals v4', date: 'Jul 2025' },
+      { title: 'Test Automation Foundations – LinkedIn Learning', date: 'Nov 2026' },
+      { title: 'Programming Foundations: Software Testing/QA – LinkedIn Learning', date: 'Nov 2026' },
+      { title: 'Testing Fundamentals – Master.dev', date: 'Nov 2026' },
+      { title: 'Introduction to Selenium – Simplilearn SkillUp', date: 'Nov 2026' },
     ],
   },
   {
-    provider: 'Cloud & Infrastructure',
-    bg: 'bg-lilac',
-    items: [
-      { title: 'AWS Cloud Practitioner Essentials', date: 'Aug 2025' },
-      { title: 'OCI 2025 AI Foundations', date: 'Aug 2025' },
-    ],
-  },
-  {
-    provider: 'HackerRank',
+    provider: 'Databases & SQL',
     bg: 'bg-mint',
     items: [
-      { title: 'SQL (Intermediate)', date: 'Aug 2025' },
-      { title: 'SQL (Basic)', date: 'Aug 2025' },
-      { title: 'Java (Basic)', date: 'Sep 2024' },
-    ],
-  },
-  {
-    provider: 'Professional Development',
-    bg: 'bg-peach',
-    items: [
-      { title: 'Mastering Agentic Design Patterns', date: 'Aug 2025' },
-      { title: 'Generative AI Overview for Project Managers', date: 'Nov 2024' },
+      { title: 'SQL (Intermediate) – HackerRank', date: 'Nov 2026' },
+      { title: 'SQL (Basic) – HackerRank', date: 'Nov 2026' },
     ],
   },
 ];
@@ -113,13 +86,12 @@ export default function EducationSection() {
       });
 
       gsap.from('.ed-cert', {
-        y: 70,
-        opacity: 0,
-        rotate: 2,
+        y: 30,
         stagger: 0.12,
-        duration: 0.9,
+        duration: 0.8,
         ease: 'power3.out',
-        scrollTrigger: { trigger: '.ed-certs', start: 'top 85%' },
+        clearProps: 'transform',
+        scrollTrigger: { trigger: '.ed-certs', start: 'top 95%', once: true },
       });
     },
     { scope: root }
@@ -136,7 +108,7 @@ export default function EducationSection() {
           icon={HiAcademicCap}
           title="Always"
           accent="learning"
-          subtitle="Strong computer science foundations, backed by continuous certifications."
+          subtitle="Academic journey at Uva Wellassa University backed by QA and SQL certifications."
         />
 
         {/* Timeline */}
@@ -158,7 +130,7 @@ export default function EducationSection() {
                 >
                   <div className="w-full lg:w-1/2 pl-14 lg:pl-0 lg:px-12">
                     <div className="ed-card card-soft rounded-[2rem] p-7 sm:p-8 hover:border-petal/40 transition-colors">
-                      <div className="flex items-start justify-between gap-4 mb-6">
+                      <div className="flex items-start justify-between gap-4 mb-5">
                         <div className="flex items-center gap-4">
                           <span className={`w-14 h-14 rounded-2xl ${edu.bg} flex items-center justify-center shrink-0`}>
                             <Icon className="w-7 h-7 text-ink" />

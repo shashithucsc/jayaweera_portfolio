@@ -1,253 +1,162 @@
 'use client';
 
 import { useRef, useState, MouseEvent as ReactMouseEvent } from 'react';
+import type { IconType } from 'react-icons';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   HiArrowUpRight,
-  HiCodeBracket,
   HiXMark,
   HiCheckCircle,
   HiBeaker,
   HiSquares2X2,
+  HiGlobeAlt,
+  HiCommandLine,
+  HiClipboardDocumentCheck,
+  HiCubeTransparent,
+  HiTruck,
+  HiAcademicCap,
 } from 'react-icons/hi2';
 import { gsap, useGSAP } from '@/lib/gsap';
 import SectionHeading from './ui/SectionHeading';
+import ProjectIllustration from './ProjectIllustration';
 
 interface Project {
   id: number;
   title: string;
+  subtitle: string;
   category: string;
-  filterGroup: 'QA & Automation' | 'Full Stack' | 'AI & ML' | 'UI/UX';
+  filterGroup: 'QA & Testing' | 'Full Stack';
   qaBadge: string;
+  icon: IconType;
+  accentBg: string;
+  metricPill: string;
   description: string;
-  qaHighlights: string[];
+  highlights: string[];
   tags: string[];
-  images: string[];
-  github: string;
-  live: string;
 }
 
 const projects: Project[] = [
   {
-    id: 5,
-    title: 'Book Management System',
-    category: 'QA Automation & Full Stack',
-    filterGroup: 'QA & Automation',
-    qaBadge: 'Selenium E2E',
-    description:
-      'Complete book management system with authentication, CRUD operations, REST APIs and automated end-to-end testing using Selenium WebDriver. Spring Boot backend with a React frontend.',
-    qaHighlights: [
-      'Automated E2E UI regression suite using Selenium WebDriver',
-      'REST API contract & status-code validation with Postman',
-      'Negative & boundary value testing on auth and CRUD forms',
-    ],
-    tags: ['Selenium', 'Spring Boot', 'React', 'REST API', 'MySQL'],
-    images: ['/images/bookapp/1.png', '/images/bookapp/2.png'],
-    github: 'https://github.com/shashithucsc/book-management-system',
-    live: '',
-  },
-  {
-    id: 12,
-    title: 'Jobs Bank Automation',
-    category: 'Workflow & Data Pipeline QA',
-    filterGroup: 'QA & Automation',
-    qaBadge: 'Data Integrity',
-    description:
-      'Automated job aggregation pipeline that collects and normalises listings from TopJobs, ITPro.lk and LinkedIn via scheduled triggers, RSS readers and validation nodes before syncing to Google Sheets and a live API.',
-    qaHighlights: [
-      'Deduplication, schema validation and null-handling checks',
-      'Scheduled trigger reliability & API response verification',
-      'Fallback validation when external feeds change',
-    ],
-    tags: ['Workflow Automation', 'API Testing', 'Data Validation', 'Sheets API'],
-    images: ['/images/jobs_bank/1.png', '/images/jobs_bank/2.png'],
-    github: '',
-    live: '',
-  },
-  {
     id: 1,
-    title: 'HomeGenie',
-    category: 'Full Stack Web Application',
-    filterGroup: 'Full Stack',
-    qaBadge: 'Role-Based QA',
+    title: 'SauceDemo UI Automation Framework',
+    subtitle: 'End-to-End Cross-Browser Test Automation',
+    category: 'QA Automation & CI/CD',
+    filterGroup: 'QA & Testing',
+    qaBadge: 'Playwright POM',
+    icon: HiGlobeAlt,
+    accentBg: 'bg-mint',
+    metricPill: '21 Automated Runs • Chromium / Firefox / WebKit',
     description:
-      'On-demand home services platform with booking, supplier management and modular MVC architecture, featuring authentication, service categories and real-time booking.',
-    qaHighlights: [
-      'Role-based access (Customer, Supplier, Admin) scenarios',
-      'End-to-end booking workflow & SQL injection checks',
-      'Cross-browser functional testing on desktop & mobile',
+      'Architected a scalable UI test automation framework using Playwright (JavaScript) and the Page Object Model (POM) design pattern covering authentication edge cases, product sorting, cart management, and checkout flows.',
+    highlights: [
+      'Architected scalable UI test automation using Playwright (JavaScript) and Page Object Model (POM)',
+      'Covered authentication edge cases, product sorting, cart management, and checkout flows',
+      'Configured cross-browser execution across Chromium, Firefox, and WebKit (21 automated runs)',
+      'Integrated GitHub Actions CI/CD to trigger automated runs and generate HTML test reports on every commit',
     ],
-    tags: ['PHP', 'MySQL', 'JavaScript', 'MVC', 'Manual QA'],
-    images: ['/images/homegenie/1.jpeg', '/images/homegenie/2.jpeg', '/images/homegenie/3.jpeg'],
-    github: 'https://github.com/shashithucsc/Homegenie',
-    live: '',
+    tags: ['Playwright', 'JavaScript', 'Page Object Model (POM)', 'GitHub Actions CI/CD', 'HTML Reporting', 'Git'],
   },
   {
     id: 2,
-    title: 'ClubSync',
-    category: 'Full Stack Event Platform',
-    filterGroup: 'Full Stack',
-    qaBadge: 'QR & Mobile QA',
+    title: 'Restful-Booker API Testing Suite',
+    subtitle: 'Automated REST API & Security Validation',
+    category: 'API & Security QA',
+    filterGroup: 'QA & Testing',
+    qaBadge: 'Postman Suite',
+    icon: HiCommandLine,
+    accentBg: 'bg-petal',
+    metricPill: '8 Requests • 14 JS Assertions • 100% Pass Rate',
     description:
-      'Club volunteer and event management system with QR-based attendance tracking, a points system and mobile-first responsive design for university clubs.',
-    qaHighlights: [
-      'QR scan state validation & duplicate check-in prevention',
-      'PostgreSQL data integrity & points calculation checks',
-      'Responsive UI testing across Android & iOS breakpoints',
+      'Developed an 8-request Postman collection validating authentication (POST /auth) and full CRUD booking lifecycles (GET, POST, PUT, DELETE) using dynamic environment variable chaining.',
+    highlights: [
+      'Developed an 8-request Postman collection covering POST /auth and full CRUD booking lifecycles',
+      'Implemented dynamic environment variable chaining for token and booking ID reuse',
+      'Authored 14 JavaScript post-response assertions verifying HTTP status codes, JSON payload accuracy, and response times (< 3000ms)',
+      'Validated negative security scenarios (403 Forbidden, 404 Not Found) with a 100% pass rate',
     ],
-    tags: ['React', 'Node.js', 'PostgreSQL', 'Express', 'QR'],
-    images: ['/images/clubsync/1.png', '/images/clubsync/2.png', '/images/clubsync/3.png'],
-    github: 'https://github.com/Sasmitha-Silva/ClubSync-Web',
-    live: '',
+    tags: ['Postman', 'REST API', 'JavaScript', 'JSON', 'Collection Runner', 'Git'],
   },
   {
     id: 3,
-    title: 'Chill Campus',
-    category: 'Real-Time Social Platform',
-    filterGroup: 'Full Stack',
-    qaBadge: 'Real-Time QA',
+    title: 'SauceDemo Manual QA Portfolio',
+    subtitle: 'End-to-End Manual Testing & Defect Management',
+    category: 'Manual QA & IEEE 829',
+    filterGroup: 'QA & Testing',
+    qaBadge: 'IEEE 829 & RTM',
+    icon: HiClipboardDocumentCheck,
+    accentBg: 'bg-lilac',
+    metricPill: '10 Scenarios • 24 Test Cases • 7 Bugs Logged',
     description:
-      'Social platform for university students with posts, real-time chat, events and community building in a clean, intuitive interface.',
-    qaHighlights: [
-      'WebSocket message delivery & reconnection testing',
-      'MongoDB CRUD & session persistence verification',
-      'Responsiveness & visual consistency checks',
+      'Authored an IEEE 829-aligned Test Plan, 10 test scenarios, 24 detailed test cases (incorporating Boundary Value Analysis and negative testing), and a bidirectional Requirements Traceability Matrix (RTM).',
+    highlights: [
+      'Authored an IEEE 829-aligned Test Plan, 10 test scenarios, and 24 detailed test cases',
+      'Applied Boundary Value Analysis (BVA) and negative testing with a bidirectional RTM',
+      'Executed multi-persona regression testing across standard_user, problem_user, and error_user',
+      'Documented 7 reproducible functional and UI defects with severity/priority classifications, reproduction steps, and annotated visual evidence',
     ],
-    tags: ['Next.js', 'Express', 'MongoDB', 'Socket.io', 'Tailwind'],
-    images: ['/images/chillcampus/1.png', '/images/chillcampus/2.png', '/images/chillcampus/3.png'],
-    github: 'https://github.com/shashithucsc/chill_campus-nextJs-',
-    live: 'https://chill-campus-2025.vercel.app',
+    tags: ['Manual Testing', 'Test Case Design (BVA)', 'RTM', 'Defect Reporting', 'Google Sheets / Excel', 'Chrome DevTools'],
   },
   {
     id: 4,
-    title: 'Athagili',
-    category: 'Matchmaking Platform',
+    title: 'PrintSphere',
+    subtitle: 'Real-Time 3D T-Shirt Customization & E-Commerce Platform',
+    category: 'Full Stack & Integration QA',
     filterGroup: 'Full Stack',
-    qaBadge: 'Auth & Chat QA',
+    qaBadge: 'MERN & 3D + QA',
+    icon: HiCubeTransparent,
+    accentBg: 'bg-peach',
+    metricPill: 'User & Employee Modules • Agile Scrum',
     description:
-      'Sri Lankan matchmaking app with real-time chat, user profiles and mobile-first responsive design on a modern stack.',
-    qaHighlights: [
-      'Supabase auth flow, privacy & RLS policy verification',
-      'Chat latency and special-character input testing',
-      'Onboarding usability & form validation testing',
+      'Developed the User Account Management module and Employee Dashboard using React.js, Node.js, Express.js and MongoDB, with authentication, role-based access control, order management and product approval workflows through RESTful APIs.',
+    highlights: [
+      'Built User Account Management and Employee Dashboard with React.js, Node.js, Express.js, and MongoDB',
+      'Implemented authentication, role-based access control, order management, and product approval workflows via RESTful APIs',
+      'Contributed to functional and integration testing, test case execution, and defect retesting',
+      'Supported system design with ER, Class, and Use Case diagrams in an Agile Scrum environment',
     ],
-    tags: ['Next.js', 'Supabase', 'Tailwind CSS', 'Real-time'],
-    images: ['/images/athagili/1.png', '/images/athagili/2.png', '/images/athagili/3.png'],
-    github: 'https://github.com/shashithucsc/athagili',
-    live: 'https://athagili.vercel.app/',
+    tags: ['React.js', 'Tailwind CSS', 'Node.js', 'Express.js', 'MongoDB', 'Three.js', 'React Three Fiber', 'RESTful APIs', 'PayHere Sandbox', 'Postman', 'Figma', 'Git'],
+  },
+  {
+    id: 5,
+    title: 'LankaTransit',
+    subtitle: 'Bus Reservation and Management System',
+    category: 'Full Stack Web Application',
+    filterGroup: 'Full Stack',
+    qaBadge: 'PHP & MySQL',
+    icon: HiTruck,
+    accentBg: 'bg-blush',
+    metricPill: 'Admin Dashboard • CRUD & Validation',
+    description:
+      'Developed the Admin Dashboard using PHP, MySQL, Bootstrap and JavaScript to manage buses, users, reservations, feedback and incident reports with CRUD operations and validation.',
+    highlights: [
+      'Developed the Admin Dashboard using PHP, MySQL, Bootstrap, and JavaScript',
+      'Managed buses, users, reservations, feedback, and incident reports',
+      'Implemented CRUD operations, form validation, and duplicate record prevention for accurate administrative workflows',
+    ],
+    tags: ['HTML', 'CSS', 'JavaScript', 'Bootstrap', 'PHP', 'MySQL', 'Git'],
   },
   {
     id: 6,
-    title: 'Chatty Chatty',
-    category: 'Real-Time Messaging App',
+    title: 'Course Feedback System (CFS)',
+    subtitle: 'Backend | Frontend',
+    category: 'Full Stack Web Application',
     filterGroup: 'Full Stack',
-    qaBadge: 'WebSocket QA',
+    qaBadge: 'Django REST + React',
+    icon: HiAcademicCap,
+    accentBg: 'bg-mint',
+    metricPill: 'Degree Management • RESTful CRUD',
     description:
-      'Real-time messaging app built on the MERN stack and Socket.io with authentication, private messaging and live updates.',
-    qaHighlights: [
-      'Concurrent multi-user session & delivery verification',
-      'JWT auth & unauthorised route access testing',
-      'Connection-drop recovery & payload edge cases',
+      'Built the Degree Management backend using Python, Django and Django REST Framework, including database models, serializers and RESTful CRUD endpoints for degree programmes.',
+    highlights: [
+      'Built the Degree Management backend using Python, Django, and Django REST Framework',
+      'Created database models, serializers, and RESTful CRUD endpoints for degree programmes',
+      'Implemented data validation and integrated the API with the React.js frontend and MySQL database',
     ],
-    tags: ['MongoDB', 'Express', 'React', 'Node.js', 'Socket.io'],
-    images: ['/images/chatty/1.png', '/images/chatty/2.png'],
-    github: 'https://github.com/shashithucsc/chat-app',
-    live: '',
-  },
-  {
-    id: 7,
-    title: 'Laptop Price Predictor',
-    category: 'Machine Learning',
-    filterGroup: 'AI & ML',
-    qaBadge: 'Model QA',
-    description:
-      'Random Forest model predicting laptop prices from specs like RAM, processor, GPU and brand.',
-    qaHighlights: [
-      'Dataset cleaning, outlier handling & feature validation',
-      'Cross-validation accuracy & error metric evaluation',
-      'Boundary testing on prediction inputs',
-    ],
-    tags: ['Python', 'Scikit-learn', 'Pandas', 'NumPy'],
-    images: ['/images/mlproject/1.png', '/images/mlproject/2.png'],
-    github: 'https://github.com/shashithucsc/laptop_price_predictor',
-    live: '',
-  },
-  {
-    id: 8,
-    title: 'AI Chat-bot',
-    category: 'AI Application',
-    filterGroup: 'AI & ML',
-    qaBadge: 'API Error QA',
-    description:
-      'Gemini-powered chatbot with a PHP backend and Flask integration for natural conversations.',
-    qaHighlights: [
-      'Timeout, rate-limit & malformed response handling',
-      'PHP-to-Flask integration & payload sanitisation',
-      'Empty & edge-case prompt validation',
-    ],
-    tags: ['PHP', 'Flask', 'JavaScript', 'Gemini API'],
-    images: ['/images/chatbot/1.png', '/images/chatbot/2.png'],
-    github: 'https://github.com/shashithucsc/chat-bot',
-    live: '',
-  },
-  {
-    id: 9,
-    title: 'Zenith',
-    category: 'UI/UX & Frontend',
-    filterGroup: 'UI/UX',
-    qaBadge: 'Visual QA',
-    description:
-      'Space tourism booking experience with stunning visuals, smooth animations and immersive destination browsing.',
-    qaHighlights: [
-      'Cross-browser animation & layout-shift checks',
-      'Booking flow & keyboard navigation verification',
-      'Typography and contrast accessibility review',
-    ],
-    tags: ['Next.js', 'Tailwind CSS', 'Framer Motion'],
-    images: ['/images/zenith/1.png', '/images/zenith/2.png'],
-    github: 'https://github.com/shashithucsc/zenith',
-    live: 'https://zenith-pearl-mu.vercel.app/',
-  },
-  {
-    id: 10,
-    title: 'Jumbo Track',
-    category: 'UI/UX Design',
-    filterGroup: 'UI/UX',
-    qaBadge: 'Usability QA',
-    description:
-      'UI/UX for an elephant-train collision early-warning system focusing on real-time tracking and clear alerts.',
-    qaHighlights: [
-      'Alert hierarchy heuristic evaluation',
-      'Prototype user-flow validation in Figma',
-      'High-contrast readability for field operators',
-    ],
-    tags: ['Figma', 'UX Research', 'Prototyping'],
-    images: ['/images/jumbotrack/1.jpeg', '/images/jumbotrack/2.jpeg'],
-    github: '',
-    live: '',
-  },
-  {
-    id: 11,
-    title: 'Cafe Hifi',
-    category: 'Desktop Application',
-    filterGroup: 'Full Stack',
-    qaBadge: 'POS QA',
-    description:
-      'Cafe management system with POS, inventory tracking, sales analytics and real-time reporting in JavaFX.',
-    qaHighlights: [
-      'Billing, tax & discount accuracy testing',
-      'Stock deduction & low-stock alert verification',
-      'Transaction rollback & concurrency checks',
-    ],
-    tags: ['JavaFX', 'MySQL', 'Java'],
-    images: ['/images/cafehifi/1.jpeg', '/images/cafehifi/2.jpeg'],
-    github: '',
-    live: '',
+    tags: ['React.js', 'Python', 'Django', 'Django REST Framework', 'MySQL', 'RESTful APIs', 'Git'],
   },
 ];
 
-const filters = ['All', 'QA & Automation', 'Full Stack', 'AI & ML', 'UI/UX'] as const;
-const badgeColors = ['bg-petal', 'bg-lilac', 'bg-peach', 'bg-mint', 'bg-blush'];
+const filters = ['All', 'QA & Testing', 'Full Stack'] as const;
 
 export default function ProjectsSection() {
   const root = useRef<HTMLElement>(null);
@@ -299,10 +208,9 @@ export default function ProjectsSection() {
           icon={HiSquares2X2}
           title="Projects I've built"
           accent="& tested"
-          subtitle="Applications engineered and carefully verified across UI, API, database and automation layers."
+          subtitle="Real QA automation frameworks, API test suites, manual QA portfolios, and full-stack web applications."
         />
 
-        {/* Filters */}
         <div className="flex flex-wrap justify-center gap-2 mb-14">
           {filters.map((f) => {
             const active = f === filter;
@@ -327,57 +235,53 @@ export default function ProjectsSection() {
           })}
         </div>
 
-        {/* Grid */}
         <div className="pj-grid grid md:grid-cols-2 lg:grid-cols-3 gap-7">
-          {visible.map((project, i) => (
-            <div key={project.id} className="pj-card">
-              <div
-                onMouseMove={tilt}
-                onMouseLeave={untilt}
-                onClick={() => setSelected(project)}
-                data-cursor
-                className="group h-full flex flex-col card-soft rounded-[2rem] p-3 cursor-pointer hover:border-petal/40 transition-colors [transform-style:preserve-3d]"
-              >
-                <div className="relative h-56 rounded-[1.5rem] overflow-hidden bg-ink-3">
-                  {project.images[0] && (
-                    <img
-                      src={project.images[0]}
-                      alt={project.title}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
-                  )}
-                  <div className="absolute inset-0 bg-ink/30 group-hover:bg-ink/10 transition-colors" />
-                  <span
-                    className={`absolute top-3 left-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full ${
-                      badgeColors[i % badgeColors.length]
-                    } text-ink text-xs font-semibold`}
-                  >
-                    <HiCheckCircle className="w-3.5 h-3.5" />
-                    {project.qaBadge}
-                  </span>
-                  <span className="absolute bottom-3 right-3 w-12 h-12 rounded-full bg-cream flex items-center justify-center scale-0 group-hover:scale-100 transition-transform duration-500">
-                    <HiArrowUpRight className="w-5 h-5 text-ink" />
-                  </span>
-                </div>
+          {visible.map((project) => (
+              <div key={project.id} className="pj-card">
+                <div
+                  onMouseMove={tilt}
+                  onMouseLeave={untilt}
+                  onClick={() => setSelected(project)}
+                  data-cursor
+                  className="group h-full flex flex-col card-soft rounded-[2rem] p-3 cursor-pointer hover:border-petal/40 transition-colors [transform-style:preserve-3d]"
+                >
+                  {/* Generated SVG Illustration */}
+                  <div className="relative h-52 rounded-[1.5rem] overflow-hidden bg-ink-3 border border-blush/10">
+                    <div className="w-full h-full transition-transform duration-700 group-hover:scale-105">
+                      <ProjectIllustration projectId={project.id} />
+                    </div>
+                    <span
+                      className={`absolute top-3 left-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full ${project.accentBg} text-ink text-xs font-semibold shadow-md`}
+                    >
+                      <HiCheckCircle className="w-3.5 h-3.5" />
+                      {project.qaBadge}
+                    </span>
+                    <span className="absolute bottom-3 right-3 w-10 h-10 rounded-full bg-cream flex items-center justify-center scale-0 group-hover:scale-100 transition-transform duration-500 shadow-lg">
+                      <HiArrowUpRight className="w-5 h-5 text-ink" />
+                    </span>
+                  </div>
 
-                <div className="flex-1 flex flex-col p-4 pt-5">
-                  <div className="text-xs uppercase tracking-[0.2em] text-petal mb-2">{project.category}</div>
-                  <h3 className="font-display text-2xl text-cream mb-2 group-hover:italic transition-all">
-                    {project.title}
-                  </h3>
-                  <p className="text-sm text-mauve leading-relaxed line-clamp-2 mb-5 flex-1">
-                    {project.description}
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {project.tags.slice(0, 4).map((t) => (
-                      <span key={t} className="px-3 py-1 rounded-full bg-ink-4 text-xs text-blush">
-                        {t}
-                      </span>
-                    ))}
+                  <div className="flex-1 flex flex-col p-4 pt-5">
+                    <div className="text-xs uppercase tracking-[0.2em] text-petal mb-2">
+                      {project.category}
+                    </div>
+                    <h3 className="font-display text-2xl text-cream mb-1 group-hover:italic transition-all">
+                      {project.title}
+                    </h3>
+                    <p className="text-xs text-blush/80 mb-3">{project.subtitle}</p>
+                    <p className="text-sm text-mauve leading-relaxed line-clamp-2 mb-5 flex-1">
+                      {project.description}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {project.tags.slice(0, 4).map((t) => (
+                        <span key={t} className="px-3 py-1 rounded-full bg-ink-4 text-xs text-blush">
+                          {t}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
           ))}
         </div>
       </div>
@@ -398,48 +302,56 @@ export default function ProjectsSection() {
               exit={{ y: 40, opacity: 0, scale: 0.96 }}
               transition={{ type: 'spring', stiffness: 260, damping: 26 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative bg-ink-2 border border-blush/10 rounded-[2rem] max-w-4xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-10"
+              className="relative bg-ink-2 border border-blush/10 rounded-[2rem] max-w-3xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-10"
             >
-              <div className="flex justify-between items-start gap-4 mb-8">
-                <div>
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-petal text-ink text-xs font-semibold mb-4">
-                    <HiCheckCircle className="w-3.5 h-3.5" />
-                    {selected.qaBadge}
+              <div className="flex justify-between items-start gap-4 mb-6">
+                <div className="flex items-start gap-4">
+                  <span
+                    className={`w-14 h-14 rounded-2xl ${selected.accentBg} flex items-center justify-center shrink-0 mt-1`}
+                  >
+                    <selected.icon className="w-7 h-7 text-ink" />
                   </span>
-                  <h3 className="font-display text-3xl sm:text-5xl text-cream">{selected.title}</h3>
-                  <p className="text-sm uppercase tracking-[0.2em] text-petal mt-2">{selected.category}</p>
+                  <div>
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-petal text-ink text-xs font-semibold mb-3">
+                      <HiCheckCircle className="w-3.5 h-3.5" />
+                      {selected.qaBadge}
+                    </span>
+                    <h3 className="font-display text-2xl sm:text-4xl text-cream">{selected.title}</h3>
+                    <p className="text-sm text-petal mt-1">{selected.subtitle}</p>
+                  </div>
                 </div>
                 <button
                   onClick={() => setSelected(null)}
                   aria-label="Close"
-                  className="w-12 h-12 shrink-0 rounded-full bg-ink-4 hover:bg-petal hover:text-ink text-cream flex items-center justify-center transition-colors"
+                  className="w-11 h-11 shrink-0 rounded-full bg-ink-4 hover:bg-petal hover:text-ink text-cream flex items-center justify-center transition-colors"
                 >
                   <HiXMark className="w-6 h-6" />
                 </button>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                {selected.images.map((img, idx) => (
-                  <img
-                    key={idx}
-                    src={img}
-                    alt={`${selected.title} screenshot ${idx + 1}`}
-                    className="w-full h-52 object-cover rounded-2xl border border-blush/10"
-                  />
-                ))}
+              <div className="mb-6 rounded-2xl overflow-hidden border border-blush/10 h-52 sm:h-64">
+                <ProjectIllustration projectId={selected.id} />
               </div>
 
-              <p className="text-mauve text-base sm:text-lg leading-relaxed mb-8">{selected.description}</p>
+              <div className="mb-6">
+                <span className="inline-block px-3.5 py-1.5 rounded-full bg-ink-3 border border-blush/10 text-xs font-mono text-blush">
+                  {selected.metricPill}
+                </span>
+              </div>
 
-              <div className="rounded-[1.5rem] bg-ink-3 border border-petal/15 p-6 mb-8">
+              <p className="text-mauve text-base sm:text-lg leading-relaxed mb-7">
+                {selected.description}
+              </p>
+
+              <div className="rounded-[1.5rem] bg-ink-3 border border-petal/15 p-6 mb-7">
                 <h4 className="flex items-center gap-3 text-cream font-semibold mb-4">
                   <span className="w-9 h-9 rounded-xl bg-mint flex items-center justify-center">
                     <HiBeaker className="w-5 h-5 text-ink" />
                   </span>
-                  QA &amp; Testing Scope
+                  Key Highlights &amp; Deliverables
                 </h4>
                 <ul className="space-y-3">
-                  {selected.qaHighlights.map((h) => (
+                  {selected.highlights.map((h) => (
                     <li key={h} className="flex items-start gap-3 text-sm text-cream/85">
                       <HiCheckCircle className="w-5 h-5 text-mint shrink-0 mt-0.5" />
                       {h}
@@ -448,40 +360,16 @@ export default function ProjectsSection() {
                 </ul>
               </div>
 
-              <div className="flex flex-wrap gap-2 mb-8">
-                {selected.tags.map((t) => (
-                  <span key={t} className="px-4 py-1.5 rounded-full bg-ink-4 text-sm text-blush">
-                    {t}
-                  </span>
-                ))}
-              </div>
-
-              {(selected.live || selected.github) && (
-                <div className="flex flex-col sm:flex-row gap-4">
-                  {selected.live && (
-                    <a
-                      href={selected.live}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full bg-petal hover:bg-blush text-ink font-semibold transition-colors"
-                    >
-                      <HiArrowUpRight className="w-5 h-5" />
-                      View Live Demo
-                    </a>
-                  )}
-                  {selected.github && (
-                    <a
-                      href={selected.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-4 rounded-full border border-blush/20 hover:border-petal text-cream font-medium transition-colors"
-                    >
-                      <HiCodeBracket className="w-5 h-5 text-petal" />
-                      View Source Code
-                    </a>
-                  )}
+              <div>
+                <p className="text-xs uppercase tracking-[0.2em] text-mauve mb-3">Tech Stack</p>
+                <div className="flex flex-wrap gap-2">
+                  {selected.tags.map((t) => (
+                    <span key={t} className="px-4 py-1.5 rounded-full bg-ink-4 text-sm text-blush">
+                      {t}
+                    </span>
+                  ))}
                 </div>
-              )}
+              </div>
             </motion.div>
           </motion.div>
         )}

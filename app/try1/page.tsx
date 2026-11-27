@@ -15,7 +15,7 @@ import Navbar from '@/components/Navbar';
 import CodeBlock from '@/components/CodeBlock';
 
 export const metadata: Metadata = {
-  title: 'Try1: Manual QA Testing with SauceDemo | Devindi Uthapala',
+  title: 'Try1: Manual QA Testing with SauceDemo | Devindi Jayaweera',
   description:
     'Complete Beginner-to-Portfolio Guide: Manual QA Testing with SauceDemo — step-by-step handbook to complete a recruiter-ready Manual QA Portfolio project.',
 };

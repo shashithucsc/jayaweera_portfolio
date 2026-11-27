@@ -4,15 +4,15 @@ import { useRef } from 'react';
 import { gsap, useGSAP, ScrollTrigger } from '@/lib/gsap';
 import Sparkle from './ui/Sparkle';
 
-const rowOne = ['Selenium', 'Playwright', 'Cypress', 'Postman', 'JMeter', 'Jira', 'JUnit 5', 'Pytest'];
+const rowOne = ['Playwright', 'Postman', 'GitHub Actions', 'React.js', 'Node.js', 'Django', 'PHP', 'MySQL'];
 const rowTwo = [
+  'Page Object Model',
   'Regression Testing',
   'API Testing',
-  'Exploratory Testing',
-  'Test Automation',
-  'Bug Triage',
-  'CI/CD Quality Gates',
-  'Accessibility',
+  'BVA & Equivalence Partitioning',
+  'Requirements Traceability Matrix',
+  'Defect Tracking',
+  'Agile / Scrum',
 ];
 
 export default function Marquee() {
@@ -27,7 +27,6 @@ export default function Marquee() {
         { xPercent: 0, duration: 34, repeat: -1, ease: 'none' }
       );
 
-      // Speed up with scroll velocity
       ScrollTrigger.create({
         trigger: root.current,
         start: 'top bottom',

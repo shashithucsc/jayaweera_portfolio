@@ -3,26 +3,25 @@
 import { useRef } from 'react';
 import type { IconType } from 'react-icons';
 import {
-  SiSelenium,
-  SiCypress,
   SiPostman,
-  SiApachejmeter,
-  SiJira,
-  SiJunit5,
-  SiPytest,
+  SiGithubactions,
   SiReact,
-  SiNextdotjs,
-  SiTypescript,
   SiNodedotjs,
-  SiPython,
-  SiMongodb,
-  SiPostgresql,
-  SiDocker,
-  SiGit,
-  SiMysql,
+  SiExpress,
   SiSpringboot,
+  SiDjango,
+  SiTailwindcss,
+  SiPython,
+  SiJavascript,
+  SiCplusplus,
+  SiPhp,
+  SiMysql,
+  SiMongodb,
+  SiFirebase,
+  SiGit,
+  SiFigma,
 } from 'react-icons/si';
-import { FaJava, FaVial } from 'react-icons/fa';
+import { FaJava, FaVial, FaTerminal } from 'react-icons/fa';
 import { HiWrenchScrewdriver, HiBeaker, HiCommandLine, HiCodeBracket } from 'react-icons/hi2';
 import { gsap, useGSAP } from '@/lib/gsap';
 import SectionHeading from './ui/SectionHeading';
@@ -41,70 +40,75 @@ const categories: {
   skills: Skill[];
 }[] = [
   {
-    title: 'Test Automation',
+    title: 'QA & Testing',
     icon: HiBeaker,
     accent: 'bg-petal',
     bar: 'bg-petal',
     skills: [
-      { name: 'Selenium', icon: SiSelenium, level: 90 },
-      { name: 'Playwright', icon: FaVial, level: 85 },
-      { name: 'Cypress', icon: SiCypress, level: 82 },
-      { name: 'JUnit 5', icon: SiJunit5, level: 84 },
-      { name: 'Pytest', icon: SiPytest, level: 80 },
+      { name: 'Playwright (POM)', icon: FaVial, level: 90 },
+      { name: 'Postman API Testing', icon: SiPostman, level: 92 },
+      { name: 'GitHub Actions CI/CD', icon: SiGithubactions, level: 85 },
+      { name: 'Manual & Regression QA', icon: HiBeaker, level: 92 },
+      { name: 'Test Case Design (BVA/EP)', icon: HiCommandLine, level: 88 },
     ],
   },
   {
-    title: 'API, Performance & Tooling',
+    title: 'Languages & Databases',
     icon: HiCommandLine,
     accent: 'bg-lilac',
     bar: 'bg-lilac',
     skills: [
-      { name: 'Postman', icon: SiPostman, level: 92 },
-      { name: 'Apache JMeter', icon: SiApachejmeter, level: 80 },
-      { name: 'Jira', icon: SiJira, level: 88 },
-      { name: 'Git', icon: SiGit, level: 90 },
-      { name: 'Docker', icon: SiDocker, level: 76 },
+      { name: 'JavaScript', icon: SiJavascript, level: 90 },
+      { name: 'Python', icon: SiPython, level: 86 },
+      { name: 'Java', icon: FaJava, level: 84 },
+      { name: 'PHP', icon: SiPhp, level: 85 },
+      { name: 'SQL (MySQL / MongoDB)', icon: SiMysql, level: 88 },
     ],
   },
   {
-    title: 'Full Stack Foundation',
+    title: 'Frameworks & Libraries',
     icon: HiCodeBracket,
     accent: 'bg-peach',
     bar: 'bg-peach',
     skills: [
-      { name: 'React / Next.js', icon: SiReact, level: 90 },
-      { name: 'TypeScript', icon: SiTypescript, level: 85 },
-      { name: 'Node.js', icon: SiNodedotjs, level: 86 },
-      { name: 'Java / Spring', icon: FaJava, level: 82 },
-      { name: 'Python', icon: SiPython, level: 84 },
+      { name: 'React / React Native', icon: SiReact, level: 90 },
+      { name: 'Node.js / Express', icon: SiNodedotjs, level: 86 },
+      { name: 'Django & DRF', icon: SiDjango, level: 84 },
+      { name: 'Spring Boot', icon: SiSpringboot, level: 78 },
+      { name: 'Tailwind CSS', icon: SiTailwindcss, level: 90 },
     ],
   },
 ];
 
-const databases = [
-  { name: 'MySQL', icon: SiMysql },
-  { name: 'PostgreSQL', icon: SiPostgresql },
+const extraTools = [
+  { name: 'C++', icon: SiCplusplus },
+  { name: 'Bash', icon: FaTerminal },
+  { name: 'Express.js', icon: SiExpress },
   { name: 'MongoDB', icon: SiMongodb },
-  { name: 'Spring Boot', icon: SiSpringboot },
-  { name: 'Next.js', icon: SiNextdotjs },
+  { name: 'Firebase / Firestore', icon: SiFirebase },
+  { name: 'Git & GitHub', icon: SiGit },
+  { name: 'Figma', icon: SiFigma },
 ];
 
 const practices = [
-  'Manual & Exploratory Testing',
+  'Playwright',
+  'Page Object Model (POM)',
+  'Postman API Testing',
+  'Manual Testing',
+  'Functional Testing',
   'Regression Testing',
-  'Smoke & Sanity',
-  'REST API Testing',
-  'Load & Performance',
-  'Test Plans & Cases',
-  'Bug Reporting & Triage',
-  'Root Cause Analysis',
-  'Page Object Model',
-  'Cross-Browser Testing',
-  'Responsive UI Testing',
-  'Accessibility (WCAG)',
-  'CI/CD Quality Gates',
-  'TDD & Unit Testing',
+  'Test Case Design (BVA)',
+  'Equivalence Partitioning',
+  'Requirements Traceability Matrix (RTM)',
+  'Bug Reporting',
+  'Defect Tracking',
+  'GitHub Actions CI/CD',
   'Agile / Scrum',
+  'REST APIs',
+  'MySQL Workbench',
+  'XAMPP',
+  'Visual Studio Code',
+  'GitHub Desktop',
 ];
 
 export default function SkillsSection() {
@@ -163,11 +167,11 @@ export default function SkillsSection() {
 
       <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8">
         <SectionHeading
-          eyebrow="Skills & Tools"
+          eyebrow="Technical Skills"
           icon={HiWrenchScrewdriver}
           title="My quality"
           accent="toolkit"
-          subtitle="Automation frameworks, testing tools and full-stack technologies I use to keep software reliable."
+          subtitle="QA automation, testing methodologies, programming languages, and full-stack frameworks."
         />
 
         <div className="sk-grid grid lg:grid-cols-3 gap-6 mb-10">
@@ -210,9 +214,9 @@ export default function SkillsSection() {
           })}
         </div>
 
-        {/* Databases & frameworks row */}
+        {/* Cloud, Databases & Tools pills */}
         <div className="sk-dbs flex flex-wrap justify-center gap-4 mb-16">
-          {databases.map((d) => {
+          {extraTools.map((d) => {
             const Icon = d.icon;
             return (
               <div
@@ -228,12 +232,12 @@ export default function SkillsSection() {
           })}
         </div>
 
-        {/* Practices */}
+        {/* QA & Engineering Practices */}
         <div className="card-soft rounded-[2rem] p-8 sm:p-10 text-center">
           <h3 className="font-display text-3xl text-cream mb-2">
-            Testing <span className="italic text-petal">practices</span>
+            QA &amp; Engineering <span className="italic text-petal">practices</span>
           </h3>
-          <p className="text-mauve text-sm mb-8">Methodologies I apply every day</p>
+          <p className="text-mauve text-sm mb-8">Tools, testing techniques, and workflows</p>
           <div className="sk-tags flex flex-wrap justify-center gap-3">
             {practices.map((p, i) => (
               <span

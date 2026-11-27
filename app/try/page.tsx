@@ -17,7 +17,7 @@ import Navbar from '@/components/Navbar';
 import CodeBlock from '@/components/CodeBlock';
 
 export const metadata: Metadata = {
-  title: 'Try: API Testing with Postman | Devindi Uthapala',
+  title: 'Try: API Testing with Postman | Devindi Jayaweera',
   description:
     'Complete Beginner-to-Portfolio Guide: API Testing with Postman — step-by-step handbook to build a GitHub-ready API Testing project.',
 };

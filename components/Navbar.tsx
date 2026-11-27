@@ -16,7 +16,6 @@ const navLinks = [
   { name: 'Projects', href: '/#projects', sectionId: 'projects' },
   { name: 'Skills', href: '/#skills', sectionId: 'skills' },
   { name: 'Education', href: '/#education', sectionId: 'education' },
-  { name: 'Try', href: '/try', sectionId: 'try' },
 ];
 
 export default function Navbar() {
