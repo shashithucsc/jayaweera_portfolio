@@ -48,7 +48,7 @@ const stats = [
   { value: 6, suffix: '', label: 'Projects built & tested' },
   { value: 0, suffix: '', text: '3.38', label: 'BSc (Hons) GPA' },
   { value: 9, suffix: " A's", label: 'G.C.E. O/L (2017)' },
-  { value: 0, suffix: '', text: '2Cs, 1S', label: 'G.C.E. A/L (2021)' },
+  { value: 6, suffix: '', label: 'Certifications' },
 ];
 
 const activities = [

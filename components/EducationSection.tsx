@@ -18,7 +18,7 @@ const education = [
     degree: 'G.C.E. Advanced Level',
     institution: 'Physical Science Stream',
     period: '2021',
-    modules: ['2Cs, 1S'],
+    description: 'Completed G.C.E. Advanced Level in the Physical Science stream.',
     icon: HiBookOpen,
     bg: 'bg-lilac',
   },
@@ -144,17 +144,7 @@ export default function EducationSection() {
                           {edu.period}
                         </span>
                       </div>
-                      {edu.modules ? (
-                        <div className="flex flex-wrap gap-2">
-                          {edu.modules.map((m) => (
-                            <span key={m} className="px-3 py-1 rounded-full bg-ink-4 text-xs text-blush">
-                              {m}
-                            </span>
-                          ))}
-                        </div>
-                      ) : (
-                        <p className="text-sm text-mauve">{edu.description}</p>
-                      )}
+                      <p className="text-sm text-mauve">{edu.description}</p>
                     </div>
                   </div>
 
