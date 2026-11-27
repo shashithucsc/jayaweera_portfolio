@@ -52,7 +52,7 @@ const stats = [
 ];
 
 const activities = [
-  'Design Team Member – IEEE Women in Engineering (WIE), Uva Wellassa University',
+  'Design Team Member – FOSS-Women in FOSS(WIF)',
   'Member – IEEE Student Branch, Uva Wellassa University',
   'Member – Chess Club, Uva Wellassa University',
   'Member – Leo Club, Uva Wellassa University',
